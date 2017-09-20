@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="vy1uZa78TMYFWnR1topmYcYimq5tOt1GnAzBn4ehlNU" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mysql," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Fang" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。 文档版本是5.7. 官网地址：https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The innoDB buffer pool">
+<meta property="og:url" content="http://blog.druidcoder.cn/2017/01/04/bufferPool/index.html">
+<meta property="og:site_name" content="Fang">
+<meta property="og:description" content="最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。 文档版本是5.7. 官网地址：https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The innoDB buffer pool">
+<meta name="twitter:description" content="最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。 文档版本是5.7. 官网地址：https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.druidcoder.cn/2017/01/04/bufferPool/"/>
+
+
+
+
+
+  <title>The innoDB buffer pool | Fang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Fang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.druidcoder.cn/2017/01/04/bufferPool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">The innoDB buffer pool</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-04T20:00:06+08:00">
+                2017-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/01/04/bufferPool/" class="leancloud_visitors" data-flag-title="The innoDB buffer pool">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。</li>
+<li>文档版本是5.7.</li>
+<li>官网地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html</a></li>
+</ul>
+<a id="more"></a>
+<h4 id="The-InnoDB-Buffer-Pool"><a href="#The-InnoDB-Buffer-Pool" class="headerlink" title="The InnoDB Buffer Pool"></a>The InnoDB Buffer Pool</h4><p>InnoDB维持了一个存储空间叫buffer pool，在内存里缓存数据和索引。知道InnoDB的buffer pool如何工作，并且经常利用它访问内存中的数据是一个很重要的mysql访问调优方式。</p>
+<p>你可以配置各种各样的InnoDB buffer pool方式来提升性能。</p>
+<ul>
+<li><p>最理想的，你设置的buffer pool大小和实际的值一样，留下足够的内存给服务器上的其他程序运行，从而没有超出页。buffer pool越大，InnoDB变的越像内存数据库，只从磁盘读取一次数据，然后在之后的读取中从内存中访问数据。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
+</li>
+<li><p>在64位系统大内存中，你可以切分buffer pool为多个部分，在并发操作中降低对内存结构的竞争。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="external">Section 15.6.3.3, “Configuring Multiple Buffer Pool Instances”</a>.</p>
+</li>
+<li><p>你可以经常访问内存中数据，尽管有突然的操作高峰比如备份或者报告。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+</li>
+<li><p>你可以控制InnoDB何时和如何提供预读请求，异步预取很快会被用到的页面进buffer pool。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+</li>
+<li><p>你可以控制当后台刷新脏页面时，InnoDB是否动态调整基于工作量的刷新比率。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p>你可以微调InnoDB buffer pool刷新行为部分来提高性能。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p>你可以配置InnoDB在服务重启后，如何保护当前buffer pool状态，避免冗长的预热期。你也可以保存当前的buffer pool状态，在服务运行的同时。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a>.</p>
+</li>
+</ul>
+<h4 id="InnoDB-Buffer-Pool-LRU-算法"><a href="#InnoDB-Buffer-Pool-LRU-算法" class="headerlink" title="InnoDB Buffer Pool LRU 算法"></a>InnoDB Buffer Pool LRU 算法</h4><p>InnoDB管理一个buffer pool列表，用一个最少最近使用(LRU)算法的变体。当房间需要增加一个新页面进pool时，InnoDB会清除最少最近用的页面，增加新页面到列表中间。这个“中点插入策略”按照以下两个子列表对待列表：</p>
+<ul>
+<li>在头部，一个新或者young页面子列表是最近访问的</li>
+<li>在尾部，一个旧页面子列表是最少最近访问的</li>
+</ul>
+<p>这个算法使得在新子列表中页面能被大量查询到。旧的子列表包含最少使用页面；这些页面是清除的候选。</p>
+<p>LRU算法默认按照以下几点操作：</p>
+<ul>
+<li>3/8的buffer pool专门给旧的子列表用</li>
+<li>列表中点是新子列表尾部遇到旧子列表头部的边界</li>
+<li>当InnoDB读取一个页面进buffer pool时，起初会被插入到中点（旧子列表的头部）。这个页面能被读取是因为它包含在用户的特殊操作中，比如一个SQL查询，或者是在InnoDB的自动预读取操作部分。</li>
+<li>随着数据库的操作，在buffer pool中未被访问的页面通过向列表尾部移动而“老化”。新旧子列表中的页面随着其他页面变新而变旧。旧子列表中页面也随着页面被插入到中点而变旧。最终，很长时间没被使用的页面到达旧列表尾部而被清除。</li>
+</ul>
+<p>默认，被查询的页面会立即移动到新子列表，意味着它们将会在很长一段时间内留在buffer pool。一个表扫描（例如一个mysqldump操作，或者没有where的select语句）会带很大的数据进入buffer poll，然后清除大量的旧数据，即使这个新数据从来不会被用。类似的，后台进程预读加载的页面，只有被移到新列表的头部才会被访问到。这些情况会经常推送有用的页面到旧子列表，然后它们成为清除的对象。关于这些行为的更多信息，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+<p>InnoDB标准监控输出包含buffer pool和内存部分的几个领域，这些从属于buffer pool LRU算法。更多细节查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-monitoring.html" target="_blank" rel="external">Section 15.6.3.9, “Monitoring the Buffer Pool Using the InnoDB Standard Monitor”</a>.</p>
+<h4 id="InnoDB-Buffer-Pool-配置选项"><a href="#InnoDB-Buffer-Pool-配置选项" class="headerlink" title="InnoDB Buffer Pool 配置选项"></a>InnoDB Buffer Pool 配置选项</h4><p>几个影响InnoDB buffer pool不同部分的配置选项。</p>
+<ul>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a><br>指定buffer pool的大小。如果buffer pool比较小，而你有充足的内存，那么把buffer pool增大点可以减少查询访问InnoDB表的磁盘I/O操作，从而提升性能。在mysql的5.7.5，innodb_buffer_pool_size设置是动态的，不用重启服务你就可以配置它。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a>.</p>
+</li>
+<li><p>innodb_buffer_pool_chunk_size<br>定义了Innodb buffer pool 改变操作的块大小。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="external">innodb_buffer_pool_instances</a><br>划分buffer pool为用户指定的几个单独部分，每一个都有自己的LRU列表和相近的数据结构，这样在并发的内存读写操作中减少竞争。这个选项只有在你设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a>大于1GB时才生效。你指定的总大小会被划分给所有的buffer polls。为了最高的效率，可以指定一个<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="external">innodb_buffer_pool_instances</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a>的组合，这样每一个buffer pool实例都至少有1g。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="external">Section 14.9.2.2, “Configuring Multiple Buffer Pool Instances”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_pct" target="_blank" rel="external">innodb_old_blocks_pct</a><br>指定InnoDB给旧子列表块用的buffer pool近似百分比。值范围为5到95。默认值为37（也就是3/8的pool）。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a><br>指定一个页面插入到旧子列表后必须停留多少ms，当它第一次被访问移到新子列表前。如果值是0，那么被移到旧子列表的页面将会立即移动到新子列表，当它第一次被访问的时候，无论插入后访问发生了多久。如果值大于0，页面会停留在旧子列表知道一个访问发生，至少第一次访问后许多ms。比如，值是1000会使页面停留在旧子列表1秒在第一次访问之后，移动到新子列表之前。</p>
+</li>
+</ul>
+<p>设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>值超过0可以防止一次表扫描扫大量的新子列表，只为了这次扫描。一次页面扫描读取行被快速连续访问多次，但是之后这个页面却是没用的。如果<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>设置的值比处理页面的时间大，那么在旧子列表的和该到列表尾部的页面将被很快的清除。这样，只被一次表扫描用的页面不会对新子列表中的大量使用的页面造成损害。</p>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>可以在运行时设置，所以你可以在执行诸如表扫描和下载操作的时候暂时改变它：</p>
+<pre><code>SET GLOBAL innodb_old_blocks_time = 1000;
+... perform queries that scan tables ...
+SET GLOBAL innodb_old_blocks_time = 0;
+</code></pre><p>这个策略并不会执行，如果你的意图是想通过充满一个表的内容来热启动buffer pool。比如，基准测试经常在服务启动时做一个表或者索引扫描，因为当用了一段时间之后，数据通常都在buffer pool里面。在这种情况，把<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>设为0，至少等到热启动完成。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+<ul>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_read_ahead_threshold" target="_blank" rel="external">innodb_read_ahead_threshold</a><br>控制线性预读的灵敏度，InnoDB经常用来预读取页面进buffer pool。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="external">innodb_random_read_ahead</a><br>为预读取页面进buffer pool启动随机预读技术。随机预读技术是基于已经存在buffer pool的也看来预言将会被用到的页面，不理会那些页面被读取的顺序。<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="external">innodb_random_read_ahead</a>默认是关闭的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>。</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing" target="_blank" rel="external">innodb_adaptive_flushing</a><br>指定是否自动调整刷新<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>的比率，基于在工作中的buffer pool。自动调整刷新比率是想要防止I/O操作的爆发。这个设定是默认开启的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing_lwm" target="_blank" rel="external">innodb_adaptive_flushing_lwm</a><br>当<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="external">adaptive flushing</a>启用时，低水位线，相当于<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_redo_log" target="_blank" rel="external">redo log</a>所能容纳的百分比。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flush_neighbors" target="_blank" rel="external">innodb_flush_neighbors</a><br>规定从buffer pool刷新页面是否也刷新其他<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">dirty pages</a>，在同样<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_extent" target="_blank" rel="external">extent</a>范围里。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flushing_avg_loops" target="_blank" rel="external">innodb_flushing_avg_loops</a><br>innoDB保留之前计算的刷新状态快照的迭代次数，控制<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="external">adaptive flushing</a>回应改变<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_workload" target="_blank" rel="external">工作量</a>的速度。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_lru_scan_depth" target="_blank" rel="external">innodb_lru_scan_depth</a><br>一个影响<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="external">flush</a>操作buffer pool的算法和启发式。主要关注i/o密集型工作量性能。具体来说，每一个buffer pool实例，page_cleaner线程扫描寻找<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>刷新有多深入buffer pool LRU的列表。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct" target="_blank" rel="external">innodb_max_dirty_pages_pct</a><br>InnoDB会尝试从buffer pool中<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="external">刷新</a>数据，使得<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>的占比不回超过这个值。指定一个从0到99的整数。默认值为75.查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct_lwm" target="_blank" rel="external">innodb_max_dirty_pages_pct_lwm</a><br>预刷新的<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>低水位控制脏页面比例。默认值0来使预刷新行为完全无效。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_filename" target="_blank" rel="external">innodb_buffer_pool_filename</a><br>指定文件名字，该文件保存<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a>产生的表空间ID和页面ID。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a><br>指明当mysql宕机的时候是否记录缓存在buffer pool的页面，以在下次重启时缩短<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>过程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="external">innodb_buffer_pool_load_at_startup</a><br>指定在mysql启动时，buffer pool<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>自动加载早些时候加载的页面.通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a><br>立即记录缓存在buffer pool的页面。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="external">innodb_buffer_pool_load_now</a><br>立即<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>buffer pool加载一些数据页面，不等mysql重启。在基准测试中将缓存恢复到已知状态很有用，或者是使mysql运行报表或维护查询后恢复正常工作负载。通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_pct" target="_blank" rel="external">innodb_buffer_pool_dump_pct</a><br>指定每一个buffer pool读出下载最近用到的页面百分比。范围从1到100. 查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_abort" target="_blank" rel="external">innodb_buffer_pool_load_abort</a><br>中断由<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="external">innodb_buffer_pool_load_at_startup</a>或者<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="external">innodb_buffer_pool_load_now</a>触发的修复buffer pool内容的进程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/27/char-varchar/" rel="next" title="varchar和char区别">
+                <i class="fa fa-chevron-left"></i> varchar和char区别
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/15/mysqlnd/" rel="prev" title="mysqlnd驱动">
+                mysqlnd驱动 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/avatar.jpg"
+              alt="fang" />
+          
+            <p class="site-author-name" itemprop="name">fang</p>
+            <p class="site-description motion-element" itemprop="description">不变的是我们一直追求卓越技术的心</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/DruidCode" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>GitHub</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/druidcoder" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>微博</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-InnoDB-Buffer-Pool"><span class="nav-number">1.</span> <span class="nav-text">The InnoDB Buffer Pool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB-Buffer-Pool-LRU-算法"><span class="nav-number">2.</span> <span class="nav-text">InnoDB Buffer Pool LRU 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#InnoDB-Buffer-Pool-配置选项"><span class="nav-number">3.</span> <span class="nav-text">InnoDB Buffer Pool 配置选项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("lAIYNBPd0gbtjqRSPXFzvYfB-gzGzoHsz", "ikW8w1fQdXE2qA7IV59JoV9M");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
