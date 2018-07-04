@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="最近在学习编写一个简单的web server，用到了makefile。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.783Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个简单的makefile编写教程">
 <meta name="twitter:description" content="最近在学习编写一个简单的web server，用到了makefile。">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,412 字
+                  1,489
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6 分钟
+                  6
                 </span>
               
             </div>
@@ -422,35 +422,35 @@
         <p>最近在学习编写一个简单的web server，用到了makefile。<br><a id="more"></a></p>
 <p>翻译资料：</p>
 <blockquote>
-<p><a href="http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/" target="_blank" rel="external">http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/</a></p>
+<p><a href="http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/" target="_blank" rel="noopener">http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/</a></p>
 </blockquote>
 <p>官方文档：</p>
 <blockquote>
-<p><a href="http://www.gnu.org/software/make/manual/make.html#Makefile-Contents" target="_blank" rel="external">http://www.gnu.org/software/make/manual/make.html#Makefile-Contents</a></p>
+<p><a href="http://www.gnu.org/software/make/manual/make.html#Makefile-Contents" target="_blank" rel="noopener">http://www.gnu.org/software/make/manual/make.html#Makefile-Contents</a></p>
 </blockquote>
 <p>Makefiles是一种简单的组织代码编写方式。这个教程不仅仅是对make用法的一个初浅的探讨，也可以作为初学者的指南，可以给小到中型项目创建自己的makefiles文件。</p>
 <p>比如有以下三个文件：</p>
 <p>#hellomake.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;hellomake.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">  <span class="comment">// call a function in another file</span></div><div class="line">  myPrintHelloMake();</div><div class="line"></div><div class="line">  <span class="keyword">return</span>(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;hellomake.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="comment">// call a function in another file</span></span><br><span class="line">  myPrintHelloMake();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>#hellofunc.c</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;hellomake.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">myPrintHelloMake</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="built_in">printf</span>(<span class="string">"Hello makefiles!\n"</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;hellomake.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">myPrintHelloMake</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"Hello makefiles!\n"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>#helomake.h</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">example include file</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">myPrintHelloMake</span><span class="params">(<span class="keyword">void</span>)</span></span>;</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">example include file</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">myPrintHelloMake</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>通常，你将执行下面的命令来编译这些代码：</p>
 <pre><code>gcc -o hellomake hellomake.c hellofunc.c -I.
 </code></pre><p>这里编译了两个c文件，命名了可执行文件hellomake。-I.的意思是包含在当前目录(.)下的hellomake.h文件。典型的测试／修改／debug的方法是在终端用向上箭头来回到你最近使用的编译命令，所以你不得不每次都这样用，特别是一旦你增加了一些c文件。</p>
 <p>不幸的事，这种编译方法有两个弊端。第一，如果你丢了编译命令或者换了电脑，你不得不从零输入，效率极低。第二，如果你只是修改了一个c文件，每次都要把它们重新编译也是耗时间和效率低的。所以，是时候看看我们用一个makefile来解决这些问题了。</p>
-<p>你可以创建一个最简单的makefile，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hellomake: hellomake.c hellofunc.c</div><div class="line">     gcc -o hellomake hellomake.c hellofunc.c -I.</div></pre></td></tr></table></figure></p>
+<p>你可以创建一个最简单的makefile，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hellomake: hellomake.c hellofunc.c</span><br><span class="line">     gcc -o hellomake hellomake.c hellofunc.c -I.</span><br></pre></td></tr></table></figure></p>
 <p>如果你把上面命令输入到一个文件叫Makefile活着makefile，然后在命令行输入make，它将会执行你在makefile文件里写的编译命令。注意到make没有参数。而且，把文件列表放到：后面，make知道如果任何一个文件改变了，规则hellomake都需要被执行。此刻，你已经解决了问题一，避免重复用键盘上的向上箭头来寻找你最近使用的编译命令。但是，仅仅改变最近编译项，系统仍然效率不高。</p>
 <p>一个非常重要需要注意的是在gcc命令前面有一个tab，这是在任何命令开始前都是必需的，否则make会很不开心。</p>
-<p>为了效率更高一点，让我们试试下面的makefile：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">CC=gcc</div><div class="line">CFLAGS=-I.</div><div class="line"></div><div class="line">hellomake: hellomake.o hellofunc.o</div><div class="line">     $(CC) -o hellomake hellomake.o hellofunc.o -I.</div></pre></td></tr></table></figure></p>
+<p>为了效率更高一点，让我们试试下面的makefile：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-I.</span><br><span class="line"></span><br><span class="line">hellomake: hellomake.o hellofunc.o</span><br><span class="line">     $(CC) -o hellomake hellomake.o hellofunc.o -I.</span><br></pre></td></tr></table></figure></p>
 <p>所以现在我们已经定义了一些常量CC和CFLAGS。这些都是特殊的常量，告诉make我们想如何编译文件hellomake.c和hellofunc.c。尤其是，宏指令CC是是c编译程序，而CFLAGS是传给编译命令的标记列表。把目标文件－hellomake.o和hellofunc.o－放入依赖列表和规则中，make知道首先应该编译.c版本文件，然后建立可执行文件hellomake。</p>
 <p>对于大部分小型项目来说用这种makefile足够了。但是，还有一件事漏掉了：头文件的包含。如果你打算修改hellomake.h文件，例如，make将不会重新编译.c文件，虽然它们是必需的。为了解决这个，我们需要告诉make所有的.c文件都依赖某个.h文件。我们可以通过写一个简单的规则，加到makefile里面来实现它。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">CC=gcc</div><div class="line">CFLAGS=-I.</div><div class="line">DEPS = hellomake.h</div><div class="line"></div><div class="line">%.o: %.c $(DEPS)</div><div class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</div><div class="line"></div><div class="line">hellomake: hellomake.o hellofunc.o </div><div class="line">	gcc -o hellomake hellomake.o hellofunc.o -I.</div></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-I.</span><br><span class="line">DEPS = hellomake.h</span><br><span class="line"></span><br><span class="line">%.o: %.c $(DEPS)</span><br><span class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</span><br><span class="line"></span><br><span class="line">hellomake: hellomake.o hellofunc.o </span><br><span class="line">	gcc -o hellomake hellomake.o hellofunc.o -I.</span><br></pre></td></tr></table></figure>
 <p>第一个新添加的是宏命令DEPS，设置.c文件依赖的.h文件。然后我们定义了一个规则应用于所有以.o结尾的文件。规则是：.o文件依赖.c文件，.h文件包含在DEPS宏命令中；创建.o文件，make必须用CC宏命令定义的编译器编译.c文件。-c标记是建立目标文件，-o $@表示把编译的输出放到:左边名字的文件中，而$&lt;是依赖列表中的第一项，而宏命令CFLAGS正如上面所说的。</p>
-<p>最终的简化，用特别宏命令$@和$^，分别表示:左边和右边，分别使以上编译规则更加通用。在下面的例子中，所有包含文件应当在DEPS列出，所有目标文件应当在OBJ中列出。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">CC=gcc</div><div class="line">CFLAGS=-I.</div><div class="line">DEPS = hellomake.h</div><div class="line">OBJ = hellomake.o hellofunc.o </div><div class="line"></div><div class="line">%.o: %.c $(DEPS)</div><div class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</div><div class="line"></div><div class="line">hellomake: $(OBJ)</div><div class="line">	gcc -o $@ $^ $(CFLAGS)</div></pre></td></tr></table></figure></p>
-<p>所以要是我们想把.h文件放入include目录，源代码放入src目录，一些本地库文件放入lib目录会怎么样呢？再者，有时候我们能隐藏那些烦人的到处都是的.o文件吗？答案是，当然可以！随后的makefile定义了include和lib目录的路径，并且把object文件放到src目录下的obj子目录。也有一个宏命令定义了任何你想要包含的库文件，比如math库文件-lm。这个makefile应该放在src目录本地。注意到，也包含了一个清理源代码和object目录的规则make clean。.PHONY规则使make命令不会生成一个名字叫clean的文件。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">IDIR =../include</div><div class="line">CC=gcc</div><div class="line">CFLAGS=-I$(IDIR)</div><div class="line"></div><div class="line">ODIR=obj</div><div class="line">LDIR =../lib</div><div class="line"></div><div class="line">LIBS=-lm</div><div class="line"></div><div class="line">_DEPS = hellomake.h</div><div class="line">DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))</div><div class="line"></div><div class="line">_OBJ = hellomake.o hellofunc.o </div><div class="line">OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))</div><div class="line"></div><div class="line"></div><div class="line">$(ODIR)/%.o: %.c $(DEPS)</div><div class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</div><div class="line"></div><div class="line">hellomake: $(OBJ)</div><div class="line">	gcc -o $@ $^ $(CFLAGS) $(LIBS)</div><div class="line"></div><div class="line">.PHONY: clean</div><div class="line"></div><div class="line">clean:</div><div class="line">	rm -f $(ODIR)<span class="comment">/*.o *~ core $(INCDIR)/*~</span></div></pre></td></tr></table></figure></p>
-<p>现在你有了一个完美的makefile，可以修改管理小到中型软件工程。你可以增加多个规则到makefile；甚至创建规则调用规则。想获取更多关于makefiles和make方法的信息，可以到官网<a href="http://www.gnu.org/software/make/manual/make.html" target="_blank" rel="external">GNU Make Manual</a>查看。</p>
+<p>最终的简化，用特别宏命令$@和$^，分别表示:左边和右边，分别使以上编译规则更加通用。在下面的例子中，所有包含文件应当在DEPS列出，所有目标文件应当在OBJ中列出。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-I.</span><br><span class="line">DEPS = hellomake.h</span><br><span class="line">OBJ = hellomake.o hellofunc.o </span><br><span class="line"></span><br><span class="line">%.o: %.c $(DEPS)</span><br><span class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</span><br><span class="line"></span><br><span class="line">hellomake: $(OBJ)</span><br><span class="line">	gcc -o $@ $^ $(CFLAGS)</span><br></pre></td></tr></table></figure></p>
+<p>所以要是我们想把.h文件放入include目录，源代码放入src目录，一些本地库文件放入lib目录会怎么样呢？再者，有时候我们能隐藏那些烦人的到处都是的.o文件吗？答案是，当然可以！随后的makefile定义了include和lib目录的路径，并且把object文件放到src目录下的obj子目录。也有一个宏命令定义了任何你想要包含的库文件，比如math库文件-lm。这个makefile应该放在src目录本地。注意到，也包含了一个清理源代码和object目录的规则make clean。.PHONY规则使make命令不会生成一个名字叫clean的文件。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">IDIR =../include</span><br><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-I$(IDIR)</span><br><span class="line"></span><br><span class="line">ODIR=obj</span><br><span class="line">LDIR =../lib</span><br><span class="line"></span><br><span class="line">LIBS=-lm</span><br><span class="line"></span><br><span class="line">_DEPS = hellomake.h</span><br><span class="line">DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))</span><br><span class="line"></span><br><span class="line">_OBJ = hellomake.o hellofunc.o </span><br><span class="line">OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$(ODIR)/%.o: %.c $(DEPS)</span><br><span class="line">	$(CC) -c -o $@ $&lt; $(CFLAGS)</span><br><span class="line"></span><br><span class="line">hellomake: $(OBJ)</span><br><span class="line">	gcc -o $@ $^ $(CFLAGS) $(LIBS)</span><br><span class="line"></span><br><span class="line">.PHONY: clean</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">	rm -f $(ODIR)<span class="comment">/*.o *~ core $(INCDIR)/*~</span></span><br></pre></td></tr></table></figure></p>
+<p>现在你有了一个完美的makefile，可以修改管理小到中型软件工程。你可以增加多个规则到makefile；甚至创建规则调用规则。想获取更多关于makefiles和make方法的信息，可以到官网<a href="http://www.gnu.org/software/make/manual/make.html" target="_blank" rel="noopener">GNU Make Manual</a>查看。</p>
 
       
     </div>
@@ -614,9 +614,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -635,7 +635,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -689,12 +689,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

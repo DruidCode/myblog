@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F2.jpg">
 <meta property="og:image" content="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F1.jpg">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于int(M)后面的参数">
 <meta name="twitter:description" content="参看官方文档：http://dev.mysql.com/doc/refman/5.6/en/numeric-type-attributes.htmlhttp://stackoverflow.com/questions/7552223/int11-vs-intanything-else 在mysql中，int存储需要占用4个字节，无论存的是324123，还是1，与存储数字大小无关。 有符号时，最小值">
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  595 字
+                  595
                 </span>
               
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  2
                 </span>
               
             </div>
@@ -425,7 +425,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F2.jpg" rel="gallery_cj7q4uqz10001kkjelesv356b"
+                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F2.jpg" rel="gallery_cjj7cxxry0003si009k3eoto2"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F2.jpg" itemprop="contentUrl"/>
               </a>
@@ -433,7 +433,7 @@
           
             
               <a class="post-gallery-img fancybox"
-                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F1.jpg" rel="gallery_cj7q4uqz10001kkjelesv356b"
+                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F1.jpg" rel="gallery_cjj7cxxry0003si009k3eoto2"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://7xsaff.com1.z0.glb.clouddn.com/2016%2F03%2F25%2F1.jpg" itemprop="contentUrl"/>
               </a>
@@ -446,13 +446,13 @@
       
 
       
-        <p><em>参看官方文档：<a href="http://dev.mysql.com/doc/refman/5.6/en/numeric-type-attributes.html" target="_blank" rel="external">http://dev.mysql.com/doc/refman/5.6/en/numeric-type-attributes.html</a></em><br><em><a href="http://stackoverflow.com/questions/7552223/int11-vs-intanything-else" target="_blank" rel="external">http://stackoverflow.com/questions/7552223/int11-vs-intanything-else</a></em></p>
+        <p><em>参看官方文档：<a href="http://dev.mysql.com/doc/refman/5.6/en/numeric-type-attributes.html" target="_blank" rel="noopener">http://dev.mysql.com/doc/refman/5.6/en/numeric-type-attributes.html</a></em><br><em><a href="http://stackoverflow.com/questions/7552223/int11-vs-intanything-else" target="_blank" rel="noopener">http://stackoverflow.com/questions/7552223/int11-vs-intanything-else</a></em></p>
 <p>在mysql中，int存储需要占用4个字节，无论存的是324123，还是1，与存储数字大小无关。</p>
 <p>有符号时，最小值为-2147483648(<strong>注意这里是11位显示宽度</strong>),最大值为2147483648(<strong>此处为10位显示宽度</strong>);<br><a id="more"></a><br>无符号时（unsigned），最小值为0，最大值为4294967295(<strong>注意这里是10位显示宽度</strong>)。</p>
 <p>在mysql创建表中，大家可以发现，假如不指定int的长度时，默认是11。为什么是11呢，不是12，不是10？</p>
 <p>这是因为默认mysql会设置为每种类型的‘最长’值长度，比如上面可以看到，有符号类型的int最大显示宽度是11位(有个负号)，所以是11。<br>假如你勾选了unsigned，即无符号类型，则为10。</p>
 <p>再看看M的意思，官方文档说明是‘display width’显示宽度。原文‘<em>MySQL supports an extension for optionally specifying the display width of integer data types in parentheses following the base keyword for the type.</em>’</p>
-<p>从字面上看，好像是我存个int(4)，它就只能显示4位数字。其实不然，文档上说‘<em>The display width does not constrain the range of values that can be stored in the column. Nor does it prevent values wider than the column display width from being displayed correctly</em>.’，它不是为了限制字段值的存储范围，也不是为了限制那些超过该列指定宽度值的可显示位数。也就是说，设定了int(4)，还是能够存储12345的数字，也能存储数字1。它是为了在值不足M位时左边补足用的，有另外一个参数叫zerofill，默认不指定，则不足M位数时，左补空格；指定了，则补0。比如设置了int(4) zerofill，存储12，mysql会在左边补足0，成为‘0012’；没有设置zerofill，则为‘  12’。<strong>这里要注意的是</strong>，在mysql的cli命令行中，是不用显示宽度的，除非是设置了zerofill，所以一般我们看不到那些补足的空格，但是其他的客户端程序可以。这里面php连接获取值为什么不是‘  12’，我也不知道，还需要再研究，可能是php做了trim。可以参看<em><a href="https://blogs.oracle.com/jsmyth/entry/what_does_the_11_mean" target="_blank" rel="external">https://blogs.oracle.com/jsmyth/entry/what_does_the_11_mean</a></em></p>
+<p>从字面上看，好像是我存个int(4)，它就只能显示4位数字。其实不然，文档上说‘<em>The display width does not constrain the range of values that can be stored in the column. Nor does it prevent values wider than the column display width from being displayed correctly</em>.’，它不是为了限制字段值的存储范围，也不是为了限制那些超过该列指定宽度值的可显示位数。也就是说，设定了int(4)，还是能够存储12345的数字，也能存储数字1。它是为了在值不足M位时左边补足用的，有另外一个参数叫zerofill，默认不指定，则不足M位数时，左补空格；指定了，则补0。比如设置了int(4) zerofill，存储12，mysql会在左边补足0，成为‘0012’；没有设置zerofill，则为‘  12’。<strong>这里要注意的是</strong>，在mysql的cli命令行中，是不用显示宽度的，除非是设置了zerofill，所以一般我们看不到那些补足的空格，但是其他的客户端程序可以。这里面php连接获取值为什么不是‘  12’，我也不知道，还需要再研究，可能是php做了trim。可以参看<em><a href="https://blogs.oracle.com/jsmyth/entry/what_does_the_11_mean" target="_blank" rel="noopener">https://blogs.oracle.com/jsmyth/entry/what_does_the_11_mean</a></em></p>
 <p>还可以发现，mysql最大可以设置的M为255，不知道为什么。。</p>
 
       
@@ -617,9 +617,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -638,7 +638,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -692,12 +692,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

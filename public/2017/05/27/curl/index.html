@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://blog.druidcoder.cn/2017/05/27/curl/2.png">
 <meta property="og:image" content="http://blog.druidcoder.cn/2017/05/27/curl/3.png">
 <meta property="og:image" content="http://blog.druidcoder.cn/2017/05/27/curl/4.png">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="curl超时导致进程假死">
 <meta name="twitter:description" content="其实主要是如何去查看进程相关的东西">
@@ -387,7 +387,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  729 字
+                  758
                 </span>
               
 
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  3
                 </span>
               
             </div>
@@ -427,21 +427,21 @@
         <p>其实主要是如何去查看进程相关的东西</p>
 <a id="more"></a>
 <p>很多时候的进程假死都是网络超时导致的，比如curl。<br>curl的底层库是libcurl，它有以下几个对时间控制的设置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CURLOPT_FTP_RESPONSE_TIMEOUT: No default (indefinite)</div><div class="line">CURLOPT_TIMEOUT: No default (indefinite)</div><div class="line">CURLOPT_TIMEOUT_MS: No default (indefinite)</div><div class="line">CURLOPT_CONNECTTIMEOUT: Defaults to 300 seconds</div><div class="line">CURLOPT_CONNECTTIMEOUT_MS: No default</div><div class="line">CURLOPT_ACCEPTTIMEOUT_MS: Defaults to 60000 ms</div></pre></td></tr></table></figure>
-<p>其中 CURLOPT_ACCEPTTIMEOUT_MS是和ftp相关的，CURLOPT_CONNECTTIMEOUT是连接的超时设置。可以从<a href="https://curl.haxx.se/libcurl/c/curl_easy_setopt.html去查看相关参数。" target="_blank" rel="external">https://curl.haxx.se/libcurl/c/curl_easy_setopt.html去查看相关参数。</a><br>可以看出，默认情况下，curl是不会超时的，假如连上服务，curl会一直保持连接。<br>对于php，可以从<a href="http://cn2.php.net/manual/zh/function.curl-setopt.php" target="_blank" rel="external">http://cn2.php.net/manual/zh/function.curl-setopt.php</a> 查看。<br>我们来模拟一下场景：<br>在一台机器a上用nc开一个123的端口去等待连接<br><img src="/2017/05/27/curl/1.png" alt="1.png" title=""><br>然后在另一台机器b上用curl命令连接<br><img src="/2017/05/27/curl/2.png" alt="2.png" title=""><br>可以看到它会阻塞在那，此时用strace命令查看curl进程，看该进程到底在干啥<br><img src="/2017/05/27/curl/3.png" alt="3.png" title=""><br>发现curl一直在用poll并且超时。<br>通常来说，我们查问题是从strace开始看的，所以找到该处，看到是poll，并且超时，而它打开的文件描述符fd是3，那么接下来用lsof查看该进程打开的所有fd<br><img src="/2017/05/27/curl/4.png" alt="4.png" title=""><br>找到fd是3的一行，图中是3u，看到是一个tcp连接，连接的对方ip正是机器a的ip。</p>
-<p>curl能设置毫秒级别的超时吗？虽然curl提供了相关ms参数设置，但实际上却是还有问题，具体参考鸟哥的这篇文章<a href="http://www.laruence.com/2014/01/21/2939.html" target="_blank" rel="external">http://www.laruence.com/2014/01/21/2939.html</a><br>php官方文档也对CURLOPT_TIMEOUT_MS给出了说明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CURLOPT_FTP_RESPONSE_TIMEOUT: No default (indefinite)</span><br><span class="line">CURLOPT_TIMEOUT: No default (indefinite)</span><br><span class="line">CURLOPT_TIMEOUT_MS: No default (indefinite)</span><br><span class="line">CURLOPT_CONNECTTIMEOUT: Defaults to 300 seconds</span><br><span class="line">CURLOPT_CONNECTTIMEOUT_MS: No default</span><br><span class="line">CURLOPT_ACCEPTTIMEOUT_MS: Defaults to 60000 ms</span><br></pre></td></tr></table></figure>
+<p>其中 CURLOPT_ACCEPTTIMEOUT_MS是和ftp相关的，CURLOPT_CONNECTTIMEOUT是连接的超时设置。可以从<a href="https://curl.haxx.se/libcurl/c/curl_easy_setopt.html去查看相关参数。" target="_blank" rel="noopener">https://curl.haxx.se/libcurl/c/curl_easy_setopt.html去查看相关参数。</a><br>可以看出，默认情况下，curl是不会超时的，假如连上服务，curl会一直保持连接。<br>对于php，可以从<a href="http://cn2.php.net/manual/zh/function.curl-setopt.php" target="_blank" rel="noopener">http://cn2.php.net/manual/zh/function.curl-setopt.php</a> 查看。<br>我们来模拟一下场景：<br>在一台机器a上用nc开一个123的端口去等待连接<br><img src="/2017/05/27/curl/1.png"><br>然后在另一台机器b上用curl命令连接<br><img src="/2017/05/27/curl/2.png"><br>可以看到它会阻塞在那，此时用strace命令查看curl进程，看该进程到底在干啥<br><img src="/2017/05/27/curl/3.png"><br>发现curl一直在用poll并且超时。<br>通常来说，我们查问题是从strace开始看的，所以找到该处，看到是poll，并且超时，而它打开的文件描述符fd是3，那么接下来用lsof查看该进程打开的所有fd<br><img src="/2017/05/27/curl/4.png"><br>找到fd是3的一行，图中是3u，看到是一个tcp连接，连接的对方ip正是机器a的ip。</p>
+<p>curl能设置毫秒级别的超时吗？虽然curl提供了相关ms参数设置，但实际上却是还有问题，具体参考鸟哥的这篇文章<a href="http://www.laruence.com/2014/01/21/2939.html" target="_blank" rel="noopener">http://www.laruence.com/2014/01/21/2939.html</a><br>php官方文档也对CURLOPT_TIMEOUT_MS给出了说明：</p>
 <blockquote>
 <p>设置cURL允许执行的最长毫秒数。 如果 libcurl 编译时使用系统标准的名称解析器（ standard system name resolver），那部分的连接仍旧使用以秒计的超时解决方案，最小超时时间还是一秒钟。</p>
 </blockquote>
 <p>还是在机器a上起123端口，然后机器b上用php去测试</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">($url)</span></span></div><div class="line"><span class="function"></span>&#123;        </div><div class="line">        $ch = curl_init();</div><div class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</div><div class="line">        curl_setopt($ch, CURLOPT_URL, $url);</div><div class="line">        curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">true</span>);</div><div class="line">        curl_setopt($ch, CURLOPT_USERAGENT, <span class="string">"Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)"</span>);</div><div class="line">        curl_setopt($ch, CURLOPT_TIMEOUT_MS, <span class="number">10</span>);</div><div class="line">        $result = curl_exec($ch);</div><div class="line">        var_dump(curl_error($ch));</div><div class="line">        curl_close($ch);</div><div class="line">        <span class="keyword">return</span> $result;</div><div class="line">&#125;        </div><div class="line"></div><div class="line">$url = <span class="string">'http://x.x.x.x:123'</span>;</div><div class="line">$start = gettimeofday(<span class="keyword">true</span>);</div><div class="line">$l = test($url);</div><div class="line">var_dump($l);</div><div class="line">$time = gettimeofday(<span class="keyword">true</span>) - $start;</div><div class="line">var_dump($time);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">($url)</span></span></span><br><span class="line"><span class="function"></span>&#123;        </span><br><span class="line">        $ch = curl_init();</span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">        curl_setopt($ch, CURLOPT_HEADER, <span class="keyword">true</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_USERAGENT, <span class="string">"Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)"</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_TIMEOUT_MS, <span class="number">10</span>);</span><br><span class="line">        $result = curl_exec($ch);</span><br><span class="line">        var_dump(curl_error($ch));</span><br><span class="line">        curl_close($ch);</span><br><span class="line">        <span class="keyword">return</span> $result;</span><br><span class="line">&#125;        </span><br><span class="line"></span><br><span class="line">$url = <span class="string">'http://x.x.x.x:123'</span>;</span><br><span class="line">$start = gettimeofday(<span class="keyword">true</span>);</span><br><span class="line">$l = test($url);</span><br><span class="line">var_dump($l);</span><br><span class="line">$time = gettimeofday(<span class="keyword">true</span>) - $start;</span><br><span class="line">var_dump($time);</span><br></pre></td></tr></table></figure>
 <p>执行返回：Timeout was reached，并且在a上没接收到任何请求<br>一种是设置CURLOPT_NOSIGNAL</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl_setopt($ch, CURLOPT_NOSIGNAL, 1);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl_setopt($ch, CURLOPT_NOSIGNAL, 1);</span><br></pre></td></tr></table></figure>
 <p>此时再执行，会发现a上确实接收到请求了，但是curl超时最小1秒，这和官网上说的一致，也就是设置毫秒无效。</p>
-<p>另外一种是启动libcurl的c-ares，这是异步dns解析，一般linux机器上安装curl都不会启动该功能，可以在自己机器上用curl –version查看下是否有c-ares标志，如需启用需要下载相关安装包，并且重新编译libcurl，可以参考<a href="https://www.haiyun.me/archives/1068.html" target="_blank" rel="external">https://www.haiyun.me/archives/1068.html</a></p>
+<p>另外一种是启动libcurl的c-ares，这是异步dns解析，一般linux机器上安装curl都不会启动该功能，可以在自己机器上用curl –version查看下是否有c-ares标志，如需启用需要下载相关安装包，并且重新编译libcurl，可以参考<a href="https://www.haiyun.me/archives/1068.html" target="_blank" rel="noopener">https://www.haiyun.me/archives/1068.html</a></p>
 <p>参考资料：</p>
 <blockquote>
-<p><a href="https://stackoverflow.com/questions/10308915/php-default-curl-timeout-value" target="_blank" rel="external">https://stackoverflow.com/questions/10308915/php-default-curl-timeout-value</a></p>
+<p><a href="https://stackoverflow.com/questions/10308915/php-default-curl-timeout-value" target="_blank" rel="noopener">https://stackoverflow.com/questions/10308915/php-default-curl-timeout-value</a></p>
 </blockquote>
 
       
@@ -608,9 +608,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -629,7 +629,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -683,12 +683,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

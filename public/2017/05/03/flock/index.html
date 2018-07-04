@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="先从应用方面，之后会从操作系统方面深入理解">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php的文件锁flock总结">
 <meta name="twitter:description" content="先从应用方面，之后会从操作系统方面深入理解">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  660 字
+                  725
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  3
                 </span>
               
             </div>
@@ -423,7 +423,7 @@
 <li>先从应用方面，之后会从操作系统方面深入理解</li>
 </ul>
 <a id="more"></a>
-<p>如果两个进程同时写一个文件，那么两个进程写的内容势必会乱掉，那么如何保证内容不乱呢，加锁。<br>PHP加锁的函数为<a href="http://cn2.php.net/manual/zh/function.flock.php" target="_blank" rel="external">flock</a>，该函数有3个参数：</p>
+<p>如果两个进程同时写一个文件，那么两个进程写的内容势必会乱掉，那么如何保证内容不乱呢，加锁。<br>PHP加锁的函数为<a href="http://cn2.php.net/manual/zh/function.flock.php" target="_blank" rel="noopener">flock</a>，该函数有3个参数：</p>
 <ol>
 <li>文件指针；</li>
 <li>锁类型，LOCK_SH共享锁，LOCK_EX独占锁，LOCK_UN释放锁。加上LOCK_NB将不会阻塞，而是立即返回。比如LOCK_SH|LOCK_NB；</li>
@@ -436,17 +436,17 @@
 </ol>
 <ul>
 <li><p>lock1.php:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> ( flock($f, LOCK_SH) ) &#123; </div><div class="line">    <span class="keyword">while</span> (!feof($f)) &#123;</div><div class="line">        $contents = fread($f, <span class="number">1</span>); </div><div class="line">        <span class="keyword">echo</span> $contents.chr(<span class="number">10</span>);</div><div class="line">        usleep(<span class="number">100000</span>);</div><div class="line">    &#125;   </div><div class="line">    flock($f, LOCK_UN);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">'no'</span>;</div><div class="line">&#125;</div><div class="line">fclose($f);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( flock($f, LOCK_SH) ) &#123; </span><br><span class="line">    <span class="keyword">while</span> (!feof($f)) &#123;</span><br><span class="line">        $contents = fread($f, <span class="number">1</span>); </span><br><span class="line">        <span class="keyword">echo</span> $contents.chr(<span class="number">10</span>);</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;   </span><br><span class="line">    flock($f, LOCK_UN);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'no'</span>;</span><br><span class="line">&#125;</span><br><span class="line">fclose($f);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>lock2.php:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</div><div class="line">$re = fwrite($f, <span class="string">'ok'</span>);</div><div class="line">var_dump($re);</div><div class="line">fclose($f);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</span><br><span class="line">$re = fwrite($f, <span class="string">'ok'</span>);</span><br><span class="line">var_dump($re);</span><br><span class="line">fclose($f);</span><br></pre></td></tr></table></figure>
 <p>3.如果在lock1.php读取一个文件时（加了LOCK_SH锁），lock2.php往里面写（加上LOCK_EX锁），那么lock2.php会阻塞直到lock1.php读取完毕后再写入</p>
 </li>
 <li><p>lock1.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> (flock($f, LOCK_SH)) &#123;</div><div class="line">    <span class="keyword">while</span> (!feof($f)) &#123;</div><div class="line">        $contents = fread($f, <span class="number">2</span>);</div><div class="line">        <span class="keyword">echo</span> $contents.chr(<span class="number">10</span>);</div><div class="line">        usleep(<span class="number">10000</span>);</div><div class="line">    &#125;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">'no lock'</span>.chr(<span class="number">10</span>);</div><div class="line">&#125;</div><div class="line">fclose($f);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (flock($f, LOCK_SH)) &#123;</span><br><span class="line">    <span class="keyword">while</span> (!feof($f)) &#123;</span><br><span class="line">        $contents = fread($f, <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">echo</span> $contents.chr(<span class="number">10</span>);</span><br><span class="line">        usleep(<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'no lock'</span>.chr(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br><span class="line">fclose($f);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>lock2.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> ( flock($f, LOCK_EX) ) &#123; </div><div class="line"><span class="comment">//if ( flock($f, LOCK_EX|LOCK_NB) ) &#123; 不会阻塞，立即返回</span></div><div class="line">    fwrite($f, <span class="string">'ok'</span>);</div><div class="line">    flock($f, LOCK_UN);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">'no'</span>;</div><div class="line">&#125;</div><div class="line">fclose($f);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( flock($f, LOCK_EX) ) &#123; </span><br><span class="line"><span class="comment">//if ( flock($f, LOCK_EX|LOCK_NB) ) &#123; 不会阻塞，立即返回</span></span><br><span class="line">    fwrite($f, <span class="string">'ok'</span>);</span><br><span class="line">    flock($f, LOCK_UN);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'no'</span>;</span><br><span class="line">&#125;</span><br><span class="line">fclose($f);</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h3><ol>
@@ -456,10 +456,10 @@
 </ol>
 <ul>
 <li><p>lock1.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> (flock($f, LOCK_EX)) &#123;</div><div class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i&lt;<span class="number">1000</span>; $i++) &#123;</div><div class="line">    fwrite($f, $i.chr(<span class="number">10</span>));</div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">fclose($f);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'a+'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (flock($f, LOCK_EX)) &#123;</span><br><span class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i&lt;<span class="number">1000</span>; $i++) &#123;</span><br><span class="line">    fwrite($f, $i.chr(<span class="number">10</span>));</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fclose($f);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>lock2.php</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</div><div class="line"></div><div class="line"><span class="keyword">if</span> (flock($f, LOCK_SH|LOCK_NB)) &#123;</div><div class="line"><span class="keyword">while</span> (!feof($f)) &#123;</div><div class="line">    $re = fread($f, <span class="number">2</span>);</div><div class="line">    <span class="keyword">echo</span> $re.chr(<span class="number">10</span>);</div><div class="line">    usleep(<span class="number">1000</span>);</div><div class="line">&#125;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">'file locked'</span>.chr(<span class="number">10</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$f = fopen(<span class="string">'test.txt'</span>, <span class="string">'r'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (flock($f, LOCK_SH|LOCK_NB)) &#123;</span><br><span class="line"><span class="keyword">while</span> (!feof($f)) &#123;</span><br><span class="line">    $re = fread($f, <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">echo</span> $re.chr(<span class="number">10</span>);</span><br><span class="line">    usleep(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'file locked'</span>.chr(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>如果多个进程同时写文件，为了避免错乱，那么每个进程都需要用flock来尝试获取锁，用LOCK_EX排它锁。</p>
@@ -635,9 +635,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -656,7 +656,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -726,12 +726,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

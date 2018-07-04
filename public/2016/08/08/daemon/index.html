@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="守护进程的一些原理和方法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.784Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="守护进程">
 <meta name="twitter:description" content="守护进程的一些原理和方法。">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,047 字
+                  1,047
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4 分钟
+                  4
                 </span>
               
             </div>
@@ -430,7 +430,7 @@
 <p><strong>那么，成为一个守护进程的关键是什么？</strong></p>
 <p>脱离终端，不继承标准输入。脱离终端的目的是避免进程在运行过程中的信息在任何终端中显示，并且进程也不会被任何终端所产生的终端信息打断。</p>
 <p><strong>如何命令行启动一个后台进程</strong></p>
-<p>可以参考这篇<a href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html" target="_blank" rel="external">Linux 守护进程的启动方法</a>。<br>这里简单说下里面的nohup，比如：nohup php 1.php 2&gt;&amp;1 &amp;<br>nohup表示挂起，标准输入会重定向到/dev/null，并且忽略sigup信号，它并不会让进程变为后台任务，所以需要在命令行末尾加上&amp;符号。</p>
+<p>可以参考这篇<a href="http://www.ruanyifeng.com/blog/2016/02/linux-daemon.html" target="_blank" rel="noopener">Linux 守护进程的启动方法</a>。<br>这里简单说下里面的nohup，比如：nohup php 1.php 2&gt;&amp;1 &amp;<br>nohup表示挂起，标准输入会重定向到/dev/null，并且忽略sigup信号，它并不会让进程变为后台任务，所以需要在命令行末尾加上&amp;符号。</p>
 <ul>
 <li>2表示标准错误(stderr)</li>
 <li>‘&gt;’表示重定向</li>
@@ -452,7 +452,7 @@
 <li>fork之后，父进程退出，子进程脱离了控制终端吗？如果脱离了，那为什么还要setsid呢？如果没有脱离，子进程已经不是session leader了，而只有session leader才能控制终端。</li>
 <li>终端退出时，发生了什么，何时发送signup信号</li>
 </ol>
-<p>参考资料：<br><em><a href="http://stackoverflow.com/questions/881388/what-is-the-reason-for-performing-a-double-fork-when-creating-a-daemon" target="_blank" rel="external">http://stackoverflow.com/questions/881388/what-is-the-reason-for-performing-a-double-fork-when-creating-a-daemon</a></em><br><em><a href="http://stackoverflow.com/questions/10932592/why-fork-twice/16655124#16655124" target="_blank" rel="external">http://stackoverflow.com/questions/10932592/why-fork-twice/16655124#16655124</a></em><br><em><a href="http://www.win.tue.nl/~aeb/linux/lk/lk-10.html" target="_blank" rel="external">http://www.win.tue.nl/~aeb/linux/lk/lk-10.html</a></em><br><em><a href="http://stackoverflow.com/questions/32780706/does-linux-kill-background-processes-if-we-close-the-terminal-from-which-it-has" target="_blank" rel="external">http://stackoverflow.com/questions/32780706/does-linux-kill-background-processes-if-we-close-the-terminal-from-which-it-has</a></em><br><em><a href="http://blog.csdn.net/ithomer/article/details/9288353" target="_blank" rel="external">http://blog.csdn.net/ithomer/article/details/9288353</a></em><br><em>《UNIX环境高级编程》</em></p>
+<p>参考资料：<br><em><a href="http://stackoverflow.com/questions/881388/what-is-the-reason-for-performing-a-double-fork-when-creating-a-daemon" target="_blank" rel="noopener">http://stackoverflow.com/questions/881388/what-is-the-reason-for-performing-a-double-fork-when-creating-a-daemon</a></em><br><em><a href="http://stackoverflow.com/questions/10932592/why-fork-twice/16655124#16655124" target="_blank" rel="noopener">http://stackoverflow.com/questions/10932592/why-fork-twice/16655124#16655124</a></em><br><em><a href="http://www.win.tue.nl/~aeb/linux/lk/lk-10.html" target="_blank" rel="noopener">http://www.win.tue.nl/~aeb/linux/lk/lk-10.html</a></em><br><em><a href="http://stackoverflow.com/questions/32780706/does-linux-kill-background-processes-if-we-close-the-terminal-from-which-it-has" target="_blank" rel="noopener">http://stackoverflow.com/questions/32780706/does-linux-kill-background-processes-if-we-close-the-terminal-from-which-it-has</a></em><br><em><a href="http://blog.csdn.net/ithomer/article/details/9288353" target="_blank" rel="noopener">http://blog.csdn.net/ithomer/article/details/9288353</a></em><br><em>《UNIX环境高级编程》</em></p>
 
       
     </div>
@@ -616,9 +616,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -637,7 +637,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -691,12 +691,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

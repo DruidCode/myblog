@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。 文档版本是5.7. 官网地址：https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.785Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The innoDB buffer pool">
 <meta name="twitter:description" content="最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。 文档版本是5.7. 官网地址：https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,735 字
+                  2,735
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  11 分钟
+                  11
                 </span>
               
             </div>
@@ -422,25 +422,25 @@
         <ul>
 <li>最近和DBA打交道，提到了InnoDB的buffer pool，所以想了解下这个概念，最好的方式当然是翻译官方文档。</li>
 <li>文档版本是5.7.</li>
-<li>官网地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html</a></li>
+<li>官网地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool.html</a></li>
 </ul>
 <a id="more"></a>
 <h4 id="The-InnoDB-Buffer-Pool"><a href="#The-InnoDB-Buffer-Pool" class="headerlink" title="The InnoDB Buffer Pool"></a>The InnoDB Buffer Pool</h4><p>InnoDB维持了一个存储空间叫buffer pool，在内存里缓存数据和索引。知道InnoDB的buffer pool如何工作，并且经常利用它访问内存中的数据是一个很重要的mysql访问调优方式。</p>
 <p>你可以配置各种各样的InnoDB buffer pool方式来提升性能。</p>
 <ul>
-<li><p>最理想的，你设置的buffer pool大小和实际的值一样，留下足够的内存给服务器上的其他程序运行，从而没有超出页。buffer pool越大，InnoDB变的越像内存数据库，只从磁盘读取一次数据，然后在之后的读取中从内存中访问数据。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
+<li><p>最理想的，你设置的buffer pool大小和实际的值一样，留下足够的内存给服务器上的其他程序运行，从而没有超出页。buffer pool越大，InnoDB变的越像内存数据库，只从磁盘读取一次数据，然后在之后的读取中从内存中访问数据。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="noopener">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
 </li>
-<li><p>在64位系统大内存中，你可以切分buffer pool为多个部分，在并发操作中降低对内存结构的竞争。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="external">Section 15.6.3.3, “Configuring Multiple Buffer Pool Instances”</a>.</p>
+<li><p>在64位系统大内存中，你可以切分buffer pool为多个部分，在并发操作中降低对内存结构的竞争。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="noopener">Section 15.6.3.3, “Configuring Multiple Buffer Pool Instances”</a>.</p>
 </li>
-<li><p>你可以经常访问内存中数据，尽管有突然的操作高峰比如备份或者报告。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+<li><p>你可以经常访问内存中数据，尽管有突然的操作高峰比如备份或者报告。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="noopener">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
 </li>
-<li><p>你可以控制InnoDB何时和如何提供预读请求，异步预取很快会被用到的页面进buffer pool。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+<li><p>你可以控制InnoDB何时和如何提供预读请求，异步预取很快会被用到的页面进buffer pool。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="noopener">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
 </li>
-<li><p>你可以控制当后台刷新脏页面时，InnoDB是否动态调整基于工作量的刷新比率。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p>你可以控制当后台刷新脏页面时，InnoDB是否动态调整基于工作量的刷新比率。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="noopener">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p>你可以微调InnoDB buffer pool刷新行为部分来提高性能。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p>你可以微调InnoDB buffer pool刷新行为部分来提高性能。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p>你可以配置InnoDB在服务重启后，如何保护当前buffer pool状态，避免冗长的预热期。你也可以保存当前的buffer pool状态，在服务运行的同时。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a>.</p>
+<li><p>你可以配置InnoDB在服务重启后，如何保护当前buffer pool状态，避免冗长的预热期。你也可以保存当前的buffer pool状态，在服务运行的同时。更多细节，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a>.</p>
 </li>
 </ul>
 <h4 id="InnoDB-Buffer-Pool-LRU-算法"><a href="#InnoDB-Buffer-Pool-LRU-算法" class="headerlink" title="InnoDB Buffer Pool LRU 算法"></a>InnoDB Buffer Pool LRU 算法</h4><p>InnoDB管理一个buffer pool列表，用一个最少最近使用(LRU)算法的变体。当房间需要增加一个新页面进pool时，InnoDB会清除最少最近用的页面，增加新页面到列表中间。这个“中点插入策略”按照以下两个子列表对待列表：</p>
@@ -456,59 +456,59 @@
 <li>当InnoDB读取一个页面进buffer pool时，起初会被插入到中点（旧子列表的头部）。这个页面能被读取是因为它包含在用户的特殊操作中，比如一个SQL查询，或者是在InnoDB的自动预读取操作部分。</li>
 <li>随着数据库的操作，在buffer pool中未被访问的页面通过向列表尾部移动而“老化”。新旧子列表中的页面随着其他页面变新而变旧。旧子列表中页面也随着页面被插入到中点而变旧。最终，很长时间没被使用的页面到达旧列表尾部而被清除。</li>
 </ul>
-<p>默认，被查询的页面会立即移动到新子列表，意味着它们将会在很长一段时间内留在buffer pool。一个表扫描（例如一个mysqldump操作，或者没有where的select语句）会带很大的数据进入buffer poll，然后清除大量的旧数据，即使这个新数据从来不会被用。类似的，后台进程预读加载的页面，只有被移到新列表的头部才会被访问到。这些情况会经常推送有用的页面到旧子列表，然后它们成为清除的对象。关于这些行为的更多信息，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
-<p>InnoDB标准监控输出包含buffer pool和内存部分的几个领域，这些从属于buffer pool LRU算法。更多细节查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-monitoring.html" target="_blank" rel="external">Section 15.6.3.9, “Monitoring the Buffer Pool Using the InnoDB Standard Monitor”</a>.</p>
+<p>默认，被查询的页面会立即移动到新子列表，意味着它们将会在很长一段时间内留在buffer pool。一个表扫描（例如一个mysqldump操作，或者没有where的select语句）会带很大的数据进入buffer poll，然后清除大量的旧数据，即使这个新数据从来不会被用。类似的，后台进程预读加载的页面，只有被移到新列表的头部才会被访问到。这些情况会经常推送有用的页面到旧子列表，然后它们成为清除的对象。关于这些行为的更多信息，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="noopener">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="noopener">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+<p>InnoDB标准监控输出包含buffer pool和内存部分的几个领域，这些从属于buffer pool LRU算法。更多细节查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-monitoring.html" target="_blank" rel="noopener">Section 15.6.3.9, “Monitoring the Buffer Pool Using the InnoDB Standard Monitor”</a>.</p>
 <h4 id="InnoDB-Buffer-Pool-配置选项"><a href="#InnoDB-Buffer-Pool-配置选项" class="headerlink" title="InnoDB Buffer Pool 配置选项"></a>InnoDB Buffer Pool 配置选项</h4><p>几个影响InnoDB buffer pool不同部分的配置选项。</p>
 <ul>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a><br>指定buffer pool的大小。如果buffer pool比较小，而你有充足的内存，那么把buffer pool增大点可以减少查询访问InnoDB表的磁盘I/O操作，从而提升性能。在mysql的5.7.5，innodb_buffer_pool_size设置是动态的，不用重启服务你就可以配置它。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="noopener">innodb_buffer_pool_size</a><br>指定buffer pool的大小。如果buffer pool比较小，而你有充足的内存，那么把buffer pool增大点可以减少查询访问InnoDB表的磁盘I/O操作，从而提升性能。在mysql的5.7.5，innodb_buffer_pool_size设置是动态的，不用重启服务你就可以配置它。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="noopener">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a>.</p>
 </li>
-<li><p>innodb_buffer_pool_chunk_size<br>定义了Innodb buffer pool 改变操作的块大小。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="external">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
+<li><p>innodb_buffer_pool_chunk_size<br>定义了Innodb buffer pool 改变操作的块大小。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html" target="_blank" rel="noopener">Section 15.6.3.2, “Configuring InnoDB Buffer Pool Size”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="external">innodb_buffer_pool_instances</a><br>划分buffer pool为用户指定的几个单独部分，每一个都有自己的LRU列表和相近的数据结构，这样在并发的内存读写操作中减少竞争。这个选项只有在你设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a>大于1GB时才生效。你指定的总大小会被划分给所有的buffer polls。为了最高的效率，可以指定一个<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="external">innodb_buffer_pool_instances</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="external">innodb_buffer_pool_size</a>的组合，这样每一个buffer pool实例都至少有1g。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="external">Section 14.9.2.2, “Configuring Multiple Buffer Pool Instances”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="noopener">innodb_buffer_pool_instances</a><br>划分buffer pool为用户指定的几个单独部分，每一个都有自己的LRU列表和相近的数据结构，这样在并发的内存读写操作中减少竞争。这个选项只有在你设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="noopener">innodb_buffer_pool_size</a>大于1GB时才生效。你指定的总大小会被划分给所有的buffer polls。为了最高的效率，可以指定一个<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_instances" target="_blank" rel="noopener">innodb_buffer_pool_instances</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_size" target="_blank" rel="noopener">innodb_buffer_pool_size</a>的组合，这样每一个buffer pool实例都至少有1g。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-multiple-buffer-pools.html" target="_blank" rel="noopener">Section 14.9.2.2, “Configuring Multiple Buffer Pool Instances”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_pct" target="_blank" rel="external">innodb_old_blocks_pct</a><br>指定InnoDB给旧子列表块用的buffer pool近似百分比。值范围为5到95。默认值为37（也就是3/8的pool）。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_pct" target="_blank" rel="noopener">innodb_old_blocks_pct</a><br>指定InnoDB给旧子列表块用的buffer pool近似百分比。值范围为5到95。默认值为37（也就是3/8的pool）。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="noopener">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a><br>指定一个页面插入到旧子列表后必须停留多少ms，当它第一次被访问移到新子列表前。如果值是0，那么被移到旧子列表的页面将会立即移动到新子列表，当它第一次被访问的时候，无论插入后访问发生了多久。如果值大于0，页面会停留在旧子列表知道一个访问发生，至少第一次访问后许多ms。比如，值是1000会使页面停留在旧子列表1秒在第一次访问之后，移动到新子列表之前。</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="noopener">innodb_old_blocks_time</a><br>指定一个页面插入到旧子列表后必须停留多少ms，当它第一次被访问移到新子列表前。如果值是0，那么被移到旧子列表的页面将会立即移动到新子列表，当它第一次被访问的时候，无论插入后访问发生了多久。如果值大于0，页面会停留在旧子列表知道一个访问发生，至少第一次访问后许多ms。比如，值是1000会使页面停留在旧子列表1秒在第一次访问之后，移动到新子列表之前。</p>
 </li>
 </ul>
-<p>设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>值超过0可以防止一次表扫描扫大量的新子列表，只为了这次扫描。一次页面扫描读取行被快速连续访问多次，但是之后这个页面却是没用的。如果<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>设置的值比处理页面的时间大，那么在旧子列表的和该到列表尾部的页面将被很快的清除。这样，只被一次表扫描用的页面不会对新子列表中的大量使用的页面造成损害。</p>
-<p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>可以在运行时设置，所以你可以在执行诸如表扫描和下载操作的时候暂时改变它：</p>
+<p>设置<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="noopener">innodb_old_blocks_time</a>值超过0可以防止一次表扫描扫大量的新子列表，只为了这次扫描。一次页面扫描读取行被快速连续访问多次，但是之后这个页面却是没用的。如果<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="noopener">innodb_old_blocks_time</a>设置的值比处理页面的时间大，那么在旧子列表的和该到列表尾部的页面将被很快的清除。这样，只被一次表扫描用的页面不会对新子列表中的大量使用的页面造成损害。</p>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="noopener">innodb_old_blocks_time</a>可以在运行时设置，所以你可以在执行诸如表扫描和下载操作的时候暂时改变它：</p>
 <pre><code>SET GLOBAL innodb_old_blocks_time = 1000;
 ... perform queries that scan tables ...
 SET GLOBAL innodb_old_blocks_time = 0;
-</code></pre><p>这个策略并不会执行，如果你的意图是想通过充满一个表的内容来热启动buffer pool。比如，基准测试经常在服务启动时做一个表或者索引扫描，因为当用了一段时间之后，数据通常都在buffer pool里面。在这种情况，把<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="external">innodb_old_blocks_time</a>设为0，至少等到热启动完成。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="external">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
+</code></pre><p>这个策略并不会执行，如果你的意图是想通过充满一个表的内容来热启动buffer pool。比如，基准测试经常在服务启动时做一个表或者索引扫描，因为当用了一段时间之后，数据通常都在buffer pool里面。在这种情况，把<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_old_blocks_time" target="_blank" rel="noopener">innodb_old_blocks_time</a>设为0，至少等到热启动完成。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="noopener">Section 15.6.3.4, “Making the Buffer Pool Scan Resistant”</a>.</p>
 <ul>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_read_ahead_threshold" target="_blank" rel="external">innodb_read_ahead_threshold</a><br>控制线性预读的灵敏度，InnoDB经常用来预读取页面进buffer pool。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_read_ahead_threshold" target="_blank" rel="noopener">innodb_read_ahead_threshold</a><br>控制线性预读的灵敏度，InnoDB经常用来预读取页面进buffer pool。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="noopener">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="external">innodb_random_read_ahead</a><br>为预读取页面进buffer pool启动随机预读技术。随机预读技术是基于已经存在buffer pool的也看来预言将会被用到的页面，不理会那些页面被读取的顺序。<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="external">innodb_random_read_ahead</a>默认是关闭的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="external">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>。</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="noopener">innodb_random_read_ahead</a><br>为预读取页面进buffer pool启动随机预读技术。随机预读技术是基于已经存在buffer pool的也看来预言将会被用到的页面，不理会那些页面被读取的顺序。<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_random_read_ahead" target="_blank" rel="noopener">innodb_random_read_ahead</a>默认是关闭的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-read_ahead.html" target="_blank" rel="noopener">Section 15.6.3.5, “Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)”</a>。</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing" target="_blank" rel="external">innodb_adaptive_flushing</a><br>指定是否自动调整刷新<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>的比率，基于在工作中的buffer pool。自动调整刷新比率是想要防止I/O操作的爆发。这个设定是默认开启的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing" target="_blank" rel="noopener">innodb_adaptive_flushing</a><br>指定是否自动调整刷新<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="noopener">脏页面</a>的比率，基于在工作中的buffer pool。自动调整刷新比率是想要防止I/O操作的爆发。这个设定是默认开启的。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="noopener">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing_lwm" target="_blank" rel="external">innodb_adaptive_flushing_lwm</a><br>当<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="external">adaptive flushing</a>启用时，低水位线，相当于<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_redo_log" target="_blank" rel="external">redo log</a>所能容纳的百分比。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_adaptive_flushing_lwm" target="_blank" rel="noopener">innodb_adaptive_flushing_lwm</a><br>当<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="noopener">adaptive flushing</a>启用时，低水位线，相当于<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_redo_log" target="_blank" rel="noopener">redo log</a>所能容纳的百分比。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flush_neighbors" target="_blank" rel="external">innodb_flush_neighbors</a><br>规定从buffer pool刷新页面是否也刷新其他<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">dirty pages</a>，在同样<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_extent" target="_blank" rel="external">extent</a>范围里。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flush_neighbors" target="_blank" rel="noopener">innodb_flush_neighbors</a><br>规定从buffer pool刷新页面是否也刷新其他<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="noopener">dirty pages</a>，在同样<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_extent" target="_blank" rel="noopener">extent</a>范围里。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flushing_avg_loops" target="_blank" rel="external">innodb_flushing_avg_loops</a><br>innoDB保留之前计算的刷新状态快照的迭代次数，控制<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="external">adaptive flushing</a>回应改变<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_workload" target="_blank" rel="external">工作量</a>的速度。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_flushing_avg_loops" target="_blank" rel="noopener">innodb_flushing_avg_loops</a><br>innoDB保留之前计算的刷新状态快照的迭代次数，控制<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_adaptive_flushing" target="_blank" rel="noopener">adaptive flushing</a>回应改变<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_workload" target="_blank" rel="noopener">工作量</a>的速度。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_lru_scan_depth" target="_blank" rel="external">innodb_lru_scan_depth</a><br>一个影响<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="external">flush</a>操作buffer pool的算法和启发式。主要关注i/o密集型工作量性能。具体来说，每一个buffer pool实例，page_cleaner线程扫描寻找<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>刷新有多深入buffer pool LRU的列表。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_lru_scan_depth" target="_blank" rel="noopener">innodb_lru_scan_depth</a><br>一个影响<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="noopener">flush</a>操作buffer pool的算法和启发式。主要关注i/o密集型工作量性能。具体来说，每一个buffer pool实例，page_cleaner线程扫描寻找<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="noopener">脏页面</a>刷新有多深入buffer pool LRU的列表。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct" target="_blank" rel="external">innodb_max_dirty_pages_pct</a><br>InnoDB会尝试从buffer pool中<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="external">刷新</a>数据，使得<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>的占比不回超过这个值。指定一个从0到99的整数。默认值为75.查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="external">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct" target="_blank" rel="noopener">innodb_max_dirty_pages_pct</a><br>InnoDB会尝试从buffer pool中<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_flush" target="_blank" rel="noopener">刷新</a>数据，使得<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="noopener">脏页面</a>的占比不回超过这个值。指定一个从0到99的整数。默认值为75.查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-performance-adaptive_flushing.html" target="_blank" rel="noopener">Section 15.6.3.6, “Configuring InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct_lwm" target="_blank" rel="external">innodb_max_dirty_pages_pct_lwm</a><br>预刷新的<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="external">脏页面</a>低水位控制脏页面比例。默认值0来使预刷新行为完全无效。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="external">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_max_dirty_pages_pct_lwm" target="_blank" rel="noopener">innodb_max_dirty_pages_pct_lwm</a><br>预刷新的<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_dirty_page" target="_blank" rel="noopener">脏页面</a>低水位控制脏页面比例。默认值0来使预刷新行为完全无效。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-lru-background-flushing.html" target="_blank" rel="noopener">Section 15.6.3.7, “Fine-tuning InnoDB Buffer Pool Flushing”</a>.</p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_filename" target="_blank" rel="external">innodb_buffer_pool_filename</a><br>指定文件名字，该文件保存<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a>产生的表空间ID和页面ID。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_filename" target="_blank" rel="noopener">innodb_buffer_pool_filename</a><br>指定文件名字，该文件保存<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="noopener">innodb_buffer_pool_dump_at_shutdown</a>和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="noopener">innodb_buffer_pool_dump_now</a>产生的表空间ID和页面ID。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a><br>指明当mysql宕机的时候是否记录缓存在buffer pool的页面，以在下次重启时缩短<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>过程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="noopener">innodb_buffer_pool_dump_at_shutdown</a><br>指明当mysql宕机的时候是否记录缓存在buffer pool的页面，以在下次重启时缩短<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="noopener">预热</a>过程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="external">innodb_buffer_pool_load_at_startup</a><br>指定在mysql启动时，buffer pool<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>自动加载早些时候加载的页面.通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="external">innodb_buffer_pool_dump_at_shutdown</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="noopener">innodb_buffer_pool_load_at_startup</a><br>指定在mysql启动时，buffer pool<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="noopener">预热</a>自动加载早些时候加载的页面.通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_at_shutdown" target="_blank" rel="noopener">innodb_buffer_pool_dump_at_shutdown</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a><br>立即记录缓存在buffer pool的页面。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="noopener">innodb_buffer_pool_dump_now</a><br>立即记录缓存在buffer pool的页面。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="external">innodb_buffer_pool_load_now</a><br>立即<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="external">预热</a>buffer pool加载一些数据页面，不等mysql重启。在基准测试中将缓存恢复到已知状态很有用，或者是使mysql运行报表或维护查询后恢复正常工作负载。通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="external">innodb_buffer_pool_dump_now</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="noopener">innodb_buffer_pool_load_now</a><br>立即<a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_warm_up" target="_blank" rel="noopener">预热</a>buffer pool加载一些数据页面，不等mysql重启。在基准测试中将缓存恢复到已知状态很有用，或者是使mysql运行报表或维护查询后恢复正常工作负载。通常和<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_now" target="_blank" rel="noopener">innodb_buffer_pool_dump_now</a>一起用。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_pct" target="_blank" rel="external">innodb_buffer_pool_dump_pct</a><br>指定每一个buffer pool读出下载最近用到的页面百分比。范围从1到100. 查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_dump_pct" target="_blank" rel="noopener">innodb_buffer_pool_dump_pct</a><br>指定每一个buffer pool读出下载最近用到的页面百分比。范围从1到100. 查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
-<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_abort" target="_blank" rel="external">innodb_buffer_pool_load_abort</a><br>中断由<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="external">innodb_buffer_pool_load_at_startup</a>或者<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="external">innodb_buffer_pool_load_now</a>触发的修复buffer pool内容的进程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="external">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
+<li><p><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_abort" target="_blank" rel="noopener">innodb_buffer_pool_load_abort</a><br>中断由<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_at_startup" target="_blank" rel="noopener">innodb_buffer_pool_load_at_startup</a>或者<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-parameters.html#sysvar_innodb_buffer_pool_load_now" target="_blank" rel="noopener">innodb_buffer_pool_load_now</a>触发的修复buffer pool内容的进程。查看<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-preload-buffer-pool.html" target="_blank" rel="noopener">Section 15.6.3.8, “Saving and Restoring the Buffer Pool State”</a></p>
 </li>
 </ul>
 
@@ -683,9 +683,9 @@ SET GLOBAL innodb_old_blocks_time = 0;
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -704,7 +704,7 @@ SET GLOBAL innodb_old_blocks_time = 0;
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -774,12 +774,6 @@ SET GLOBAL innodb_old_blocks_time = 0;
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

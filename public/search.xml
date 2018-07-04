@@ -111,7 +111,7 @@
   <entry>
     <title><![CDATA[好用的工具ctags]]></title>
     <url>%2F2016%2F06%2F24%2Fctags%2F</url>
-    <content type="text"><![CDATA[参考资料http://www.cnblogs.com/feisky/archive/2012/02/07/2341932.htmlhttp://blog.csdn.net/alexdboy/article/details/3871707 用vim查看代码的时候能够用上 ctags的功能：扫描指定的源文件，找出其中所包含的语法元素，并将找到的相关内容记录下来。大部分的linux系统上都自带有这个工具，而我的mac上虽然也有自带的，但是却不好用，连version都没有，所以得自己安装一个官方的。 从官网上下载：http://ctags.sourceforge.net/ 现在版本是5.8然后安装： &gt; ./configure &gt; make &gt; make install mac自带的地址在/usr/bin/ctags，而自己安装的在/usr/local/bin/ctags，替换下，这样普通用户也能用了。 可以用ctags –list-languages 查看能识别哪些语言 用法： 首先，生成标签文件，一般在根目录下，使用命令ctags -R . -R表示recursive，递归,为当前目录及其子目录中的文件生成标签文件。最后一个.表示在当前目录 运行完当前目录会多一个文件tags，就是索引文件。 然后用vim打开文件，ctrl+]找到光标所在位置的标签定义的地方，ctrl+t 回到跳转之前的标签处。 比如打开a.php，里面有个search函数，定义在b.php，这时可以把光标移到search处，键盘执行ctrl+]，这时会在当前窗口打开b.php，并且光标处在function search一行，执行ctrl+t，回到上个位置。 注意：此时运行vim，必须在&quot;tags&quot;文件所在的目录下运行。 否则，运行它会找不到&quot;tags&quot;文件，而需要在vim中用&quot;:set tags=&quot;命令设定&quot;tags&quot;文件的路径。 对于一个稍微大点的项目，你可能在任何一个目录下打开vim， 这时在.vimrc中增加一行：set tags=tags;/ 告诉vim在当前目录找不到tags文件时请到上层目录查找，一直往上级目录，直到找到tags文件为止。 这在阅读c代码尤为有用]]></content>
+    <content type="text"><![CDATA[参考资料http://www.cnblogs.com/feisky/archive/2012/02/07/2341932.htmlhttp://blog.csdn.net/alexdboy/article/details/3871707 用vim查看代码的时候能够用上 ctags的功能：扫描指定的源文件，找出其中所包含的语法元素，并将找到的相关内容记录下来。大部分的linux系统上都自带有这个工具，而我的mac上虽然也有自带的，但是却不好用，连version都没有，所以得自己安装一个官方的。 从官网上下载：http://ctags.sourceforge.net/ 现在版本是5.8然后安装： &gt; ./configure &gt; make &gt; make installmac自带的地址在/usr/bin/ctags，而自己安装的在/usr/local/bin/ctags，替换下，这样普通用户也能用了。 可以用ctags –list-languages 查看能识别哪些语言 用法： 首先，生成标签文件，一般在根目录下，使用命令ctags -R . -R表示recursive，递归,为当前目录及其子目录中的文件生成标签文件。最后一个.表示在当前目录 运行完当前目录会多一个文件tags，就是索引文件。 然后用vim打开文件，ctrl+]找到光标所在位置的标签定义的地方，ctrl+t 回到跳转之前的标签处。 比如打开a.php，里面有个search函数，定义在b.php，这时可以把光标移到search处，键盘执行ctrl+]，这时会在当前窗口打开b.php，并且光标处在function search一行，执行ctrl+t，回到上个位置。 注意：此时运行vim，必须在&quot;tags&quot;文件所在的目录下运行。 否则，运行它会找不到&quot;tags&quot;文件，而需要在vim中用&quot;:set tags=&quot;命令设定&quot;tags&quot;文件的路径。 对于一个稍微大点的项目，你可能在任何一个目录下打开vim， 这时在.vimrc中增加一行：set tags=tags;/ 告诉vim在当前目录找不到tags文件时请到上层目录查找，一直往上级目录，直到找到tags文件为止。 这在阅读c代码尤为有用]]></content>
       <categories>
         <category>linux</category>
       </categories>
@@ -149,8 +149,8 @@
         <category>数据库</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>翻译</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>

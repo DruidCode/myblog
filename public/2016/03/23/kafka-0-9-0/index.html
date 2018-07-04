@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://blog.druidcoder.cn/2016/03/23/kafka-0-9-0/producer_consumer.png">
 <meta property="og:image" content="http://blog.druidcoder.cn/2016/03/23/kafka-0-9-0/log_anatomy.png">
 <meta property="og:image" content="http://blog.druidcoder.cn/2016/03/23/kafka-0-9-0/consumer-groups.png">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.770Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka-0.9.0">
 <meta name="twitter:description" content="原文：http://kafka.apache.org/documentation.html  自己翻译的kafka官方文档（哈哈），持续更新中。。。">
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,876 字
+                  3,876
                 </span>
               
 
@@ -402,7 +402,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  14 分钟
+                  14
                 </span>
               
             </div>
@@ -423,7 +423,7 @@
       
 
       
-        <p><em>原文：<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="external">http://kafka.apache.org/documentation.html</a></em></p>
+        <p><em>原文：<a href="http://kafka.apache.org/documentation.html" target="_blank" rel="noopener">http://kafka.apache.org/documentation.html</a></em></p>
 <blockquote>
 <p>自己翻译的kafka官方文档（哈哈），持续更新中。。。</p>
 </blockquote>
@@ -440,12 +440,12 @@
 </li>
 </ul>
 <p>所以，以一个高层次来说，producers通过网络发送消息给kafka集群，集群轮流把它们提供给consumers，如下图：</p>
-<img src="/2016/03/23/kafka-0-9-0/producer_consumer.png" alt="producer_consumer.png" title="">
+<img src="/2016/03/23/kafka-0-9-0/producer_consumer.png">
 <p>客户端和服务器之间的交流是以一个单一，高性能，跨语言的tcp协议完成。我们为kafka提供了一个java客户端，但是客户端可以是很多其他语言。</p>
 <p><strong>topics 和 logs</strong></p>
 <p>让我们首先投入到kafka提供的高级抽象概念－topic</p>
 <p>一个topic就是一个种类或者是已发布消息的名称。对于每一个topic，kafka集群(cluster)维持一个分区日志如下图：</p>
-<img src="/2016/03/23/kafka-0-9-0/log_anatomy.png" alt="log_anatomy.png" title="">
+<img src="/2016/03/23/kafka-0-9-0/log_anatomy.png">
 <p>每一区都是一系列顺序的，不可改变的消息，消息被连续添加到一个commit log。在分区里的消息都被赋予一个序列id号称作offset，在相应区里面是唯一的。</p>
 <p>在一个可以配置的时间段里，kafka保留所有已发布的消息，无论它们是否被消费。例如，如果日志保留时间设置为2天，那么一个消息在发布后的两天内对于消费者是有效的，之后它将会被丢弃从而释放空间。在数据大小方面而言，kafka的性能持续有效，所以保留大量数据没有问题。</p>
 <p>事实上，在日志中以每一个消费者的方式保留的唯一元数据是消费者的位置，称作“offset”。这个偏移量由消费者控制：当消费者读消息的时候将线性推进它的偏移量，但是事实上该位置由消费者控制，它可以以任何顺序消费消息。例如，一个消费者可以重置到一个旧的偏移量重新执行。</p>
@@ -464,7 +464,7 @@
 <p>更通常的，但是，我们发现topics主题有小数目的consumer groups消费群体，用于每个“logical subscriber”逻辑订阅者。每一组由许多可扩展和容错的消费实例组成，就是pub-sub语义上是消费群中的订阅者而不是一个单一的进程。</p>
 <p>kafka也比传统消息系统更强的排序保证。</p>
 <p>一个传统队列在服务器上顺序保留了消息，如果多个消费者从队列里消费，那么服务器会顺序处理保存的消息。但是，虽然服务器顺序分发消息，但是消息还是被异步转发给消费者，所以它们可能不是顺序到达不同的消费者。这明显意味着，消息的顺序性在并行消费面前失效了。消息系统经常通过一个“exclusive consumer”独家消费的概念来解决这个问题，即只允许一个进程从服务器消费，但是这意味着在进程中没有并行。</p>
-<img src="/2016/03/23/kafka-0-9-0/consumer-groups.png" alt="consumer-groups.png" title="">
+<img src="/2016/03/23/kafka-0-9-0/consumer-groups.png">
 <p><em>一个2个服务器的kafka集群，用2个消费群组绑定了4个分区(p0-p3)。消费群A有2个消费实例，消费群B有4个。</em></p>
 <p>kafka在这方面做的更好。通过一个在主题中的并行(parallelism)概念－分区，kafka不仅可以保证顺序，而且还可以在消费进程池里面负载均衡。这个通过赋予消费群里的消费者主题分区实现，在一个组里面每一个分区被一个消费者消费。通过这个，我们保证消费者是分区里的唯一读取者并且顺序消费数据。所以有很多这样的分区仍在很多消费者实例中负载均衡。但是要注意，在一个消费群里面不可能有比分区更多的消费实例。</p>
 <p>kafka只在一个分区内提供全序消息，而不是在分类里的分区之间。对于大部分应用来说，预分区通过key分区数据的能力已经足够了。但是，如果你请求一个全序消息，这只能在一个只有一个分区的分类里实现，虽然这意味着一个消费者处理一个消费群。</p>
@@ -476,11 +476,11 @@
 <li>对于一个分类冗余因子n，我们将容忍n-1个服务器丢失提交给日志的信息。</li>
 </ul>
 <p>更多这些保证的详细信息会在文档的设计部分给出。</p>
-<h3 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h3><p>以下是一些apache kafka常见使用案例的描述。要查看这些领域的更多概述，请看这个<a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="external">blog</a>.</p>
+<h3 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h3><p>以下是一些apache kafka常见使用案例的描述。要查看这些领域的更多概述，请看这个<a href="https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying" target="_blank" rel="noopener">blog</a>.</p>
 <p><strong>messaging消息传递</strong></p>
 <p>作为一个传统消息代理的替代者，kafka运作的很好。消息代理基于很多种原因使用（从数据生产者中解耦，缓存还没处理的消息等等）。与大部分消息系统对比，kafka有更好的吞吐量，内置分区，冗余和容错机制，使得它能够很好的置身于大规模消息处理的应用中。</p>
 <p>以我们的经验，消息传递使用通常相当于低吞吐量，但是端对端低延时，基于kafka提供的高持久保证。</p>
-<p>在这个领域，kafka可以比得上传统的消息系统比如<a href="http://activemq.apache.org/" target="_blank" rel="external">ActiveMQ</a>或者<a href="https://www.rabbitmq.com/" target="_blank" rel="external">RabbitMQ</a>。</p>
+<p>在这个领域，kafka可以比得上传统的消息系统比如<a href="http://activemq.apache.org/" target="_blank" rel="noopener">ActiveMQ</a>或者<a href="https://www.rabbitmq.com/" target="_blank" rel="noopener">RabbitMQ</a>。</p>
 <p><strong>网站行为轨迹</strong></p>
 <p>kafka的最初用途是可以重建一个用户的行为轨迹线作为一组实时的发布－订阅feed。这意味着网站活动（比如pv，搜索，或者其他可获得的用户行为）会以每个行为类型一个topic分类的发布到中央topic。这些feed被一系列用途使用，包括实时进程、实时监控、加载进hadoop或者离线数据仓库系统做离线处理和报告。</p>
 <p>活跃的轨迹通常包含了高容量的每个用户pv产生的活跃信息。</p>
@@ -489,14 +489,14 @@
 <p><strong>日志聚合</strong></p>
 <p>很多朋友用kafka作为日志聚合的一个解决替代方案。典型的，日志聚合线下收集物理日志文件，然后把它们放入一个集中的地方（一个文件系统或者HDFS）来处理。kafka理论上远离了文件细节，给了一个更干净的文件抽象概念，甚至数据作为信息流。这对多种数据源和分布式数据消费有着低延迟和更好的支持。相比于日志中心系统比如scribe和flume，kafka同样提供高性能，强持久冗余保证和更低的端对端延迟。</p>
 <p><strong>流式处理</strong></p>
-<p>很多用户都是最终阶段处理那些从分类消费而来的未经处理的数据，然后汇总，丰富，或者转换进新的kafka分类作进一步的消费。例如一个文章推荐处理流程可能是先从rss feed流中爬文章内容，然后发布到’articles’分类中；更进一步的处理可能是规范化或者对内容去重，扔到一个放干净文章内容的分类里；最后一步可能是匹配这些内容给相关用户。这创建了一个有别于个别分类的实时数据流曲线图。<a href="https://storm.apache.org/" target="_blank" rel="external">Storm</a>和<a href="http://samza.apache.org/" target="_blank" rel="external">Samza</a>是实现这些转换的流行框架。</p>
+<p>很多用户都是最终阶段处理那些从分类消费而来的未经处理的数据，然后汇总，丰富，或者转换进新的kafka分类作进一步的消费。例如一个文章推荐处理流程可能是先从rss feed流中爬文章内容，然后发布到’articles’分类中；更进一步的处理可能是规范化或者对内容去重，扔到一个放干净文章内容的分类里；最后一步可能是匹配这些内容给相关用户。这创建了一个有别于个别分类的实时数据流曲线图。<a href="https://storm.apache.org/" target="_blank" rel="noopener">Storm</a>和<a href="http://samza.apache.org/" target="_blank" rel="noopener">Samza</a>是实现这些转换的流行框架。</p>
 <p><strong>事件源</strong></p>
 <p>事件源是一种状态改变以时间顺序记录的一种应用设计方式。用这种方式，kafka以非常大的存储日志数据支持使的它成为一个应用极好的后端。</p>
 <p><strong>日志提交</strong></p>
-<p>kafka可以以一种外在的日志提交为分布式系统服务。这个日志帮助在节点之间复制数据，和作为一种预同步机制为那些失败节点恢复数据。kafka的这个<a href="http://kafka.apache.org/documentation.html#compaction" target="_blank" rel="external">log compaction</a>特点帮助支持了这个用例。在这个用法上kafka和<a href="http://zookeeper.apache.org/bookkeeper/" target="_blank" rel="external">Apache BookKeeper</a>项目类似。</p>
+<p>kafka可以以一种外在的日志提交为分布式系统服务。这个日志帮助在节点之间复制数据，和作为一种预同步机制为那些失败节点恢复数据。kafka的这个<a href="http://kafka.apache.org/documentation.html#compaction" target="_blank" rel="noopener">log compaction</a>特点帮助支持了这个用例。在这个用法上kafka和<a href="http://zookeeper.apache.org/bookkeeper/" target="_blank" rel="noopener">Apache BookKeeper</a>项目类似。</p>
 <h3 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h3><p>这部分指导假定你是从新开始，没有kafka或者zookeeper数据。</p>
 <p><strong>第一步：下载源代码</strong></p>
-<p><a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz" target="_blank" rel="external">下载</a>0.9.0.0版本，然后解压它。</p>
+<p><a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.9.0.0/kafka_2.11-0.9.0.0.tgz" target="_blank" rel="noopener">下载</a>0.9.0.0版本，然后解压它。</p>
 <pre><code>&gt; tar -xzf kafka_2.11-0.9.0.0.tgz
 &gt; cd kafka_2.11-0.9.0.0
 </code></pre><p><strong>第二步：启动服务</strong></p>
@@ -722,9 +722,9 @@ log.dir=/tmp/kafka-logs-2
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -743,7 +743,7 @@ log.dir=/tmp/kafka-logs-2
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -813,12 +813,6 @@ log.dir=/tmp/kafka-logs-2
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

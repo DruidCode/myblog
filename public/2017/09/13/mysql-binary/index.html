@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="以前都没用过binary和varbinary类型，这边存中文用这两个类型 mysql版本为5.7 官网地址：https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.793Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql字段类型binary和varbinary">
 <meta name="twitter:description" content="以前都没用过binary和varbinary类型，这边存中文用这两个类型 mysql版本为5.7 官网地址：https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  848 字
+                  848
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3 分钟
+                  3
                 </span>
               
             </div>
@@ -422,13 +422,13 @@
         <ul>
 <li>以前都没用过binary和varbinary类型，这边存中文用这两个类型</li>
 <li>mysql版本为5.7</li>
-<li>官网地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html</a></li>
+<li>官网地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html</a></li>
 </ul>
 <a id="more"></a>
 <p>binary、varbinary类型和char、varchar类似，除了它们是存储二进制数据，而不是非二进制字符串。也就是说它们包含字节而不是字符串。这意味着，它们有二进制字符集和校对规则，并且基于值中的字节数值比较和排序。</p>
 <p>允许的最大长度和char、varchar一样，除了一个是字节长度，一个是字符长度。</p>
-<p>binary和varbinary数据类型与char binary和varchar binary数据类型不同。对于后一种，binary属性不会把列当成二进制字符列。相反，它会使用列字符集的二进制(_bin)校对规则，列本身存储非二进制字符串而不是二进制字节串。比如，char(5) binary是char(5) CHARACTER SET latin1 COLLATE latin1_bin，假设默认的字符集为latin1。区别于binary(5)，存储的是5字节二进制字符，二进制字符集和校对规则。关于更多二进制字符和非二进制字符串有二进制校对规则的区别，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/charset-binary-collations.html" target="_blank" rel="external">Section 10.1.8.5, “The binary Collation Compared to _bin Collations”</a>。</p>
-<p>如果严格sql模式没有开启，并且你还给binary或varbinary列设置了超出列最大长度的值，则值会被截断至合适长度并且产生一个警告。对于缩减的例子，你可以通过开启严格sql模式来禁止插入值，从而产生一个错误（而不是一个警告）。可以查看<a href="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html" target="_blank" rel="external">Section 5.1.8, “Server SQL Modes”</a>。</p>
+<p>binary和varbinary数据类型与char binary和varchar binary数据类型不同。对于后一种，binary属性不会把列当成二进制字符列。相反，它会使用列字符集的二进制(_bin)校对规则，列本身存储非二进制字符串而不是二进制字节串。比如，char(5) binary是char(5) CHARACTER SET latin1 COLLATE latin1_bin，假设默认的字符集为latin1。区别于binary(5)，存储的是5字节二进制字符，二进制字符集和校对规则。关于更多二进制字符和非二进制字符串有二进制校对规则的区别，查看<a href="https://dev.mysql.com/doc/refman/5.7/en/charset-binary-collations.html" target="_blank" rel="noopener">Section 10.1.8.5, “The binary Collation Compared to _bin Collations”</a>。</p>
+<p>如果严格sql模式没有开启，并且你还给binary或varbinary列设置了超出列最大长度的值，则值会被截断至合适长度并且产生一个警告。对于缩减的例子，你可以通过开启严格sql模式来禁止插入值，从而产生一个错误（而不是一个警告）。可以查看<a href="https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html" target="_blank" rel="noopener">Section 5.1.8, “Server SQL Modes”</a>。</p>
 <p>当存储binary值时，它们会被填充值右填充到指定长度。填充值为0x00(0字节)。插入时右填充0x00，查询时不删除尾随字节。所有字节在比较时都有意义，包括order by和distinct操作。0x00字节和空格在比较时是不同的，0x00小于空格。</p>
 <p>比如：对于binary(3)列，插入’a ‘时会变成’a \0’。插入’a\0’会变成’a\0\0’。查询时插入的值保持不变。</p>
 <p>对于varbinary，插入不会填充，查询时不会去除任何字节。所有字节在比较时都有意义，包括order by和distinct操作。0x00字节和空格在比较时是不同的，0x00小于空格。</p>
@@ -607,9 +607,9 @@ mysql&gt; SELECT HEX(c), c = &apos;a&apos;, c = &apos;a\0\0&apos; from t;
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -628,7 +628,7 @@ mysql&gt; SELECT HEX(c), c = &apos;a&apos;, c = &apos;a\0\0&apos; from t;
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -682,12 +682,6 @@ mysql&gt; SELECT HEX(c), c = &apos;a&apos;, c = &apos;a\0\0&apos; from t;
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

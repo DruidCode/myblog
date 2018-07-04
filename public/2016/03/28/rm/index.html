@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Fang">
 <meta property="og:description" content="14年9月写在csdn上 某一天，程序写日志把磁盘给写满了。原因一是程序有死循环，写日志太多了；二是即使用rm把文件删掉了，也没释放空间。 要讨论的就是第二个原因。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux下删除文件，空间不释放">
 <meta name="twitter:description" content="14年9月写在csdn上 某一天，程序写日志把磁盘给写满了。原因一是程序有死循环，写日志太多了；二是即使用rm把文件删掉了，也没释放空间。 要讨论的就是第二个原因。">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  431 字
+                  439
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2 分钟
+                  2
                 </span>
               
             </div>
@@ -424,12 +424,12 @@
 <p>要讨论的就是第二个原因。<br><a id="more"></a></p>
 <p>我们来简单重现下：</p>
 <p>1，写一个test</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$a = <span class="string">'111'</span>;  </div><div class="line">$f = fopen(<span class="string">'1.txt'</span>, <span class="string">'a+'</span>);  </div><div class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;  </div><div class="line">    fwrite($f, $a);  </div><div class="line">    sleep(<span class="number">1</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="string">'111'</span>;  </span><br><span class="line">$f = fopen(<span class="string">'1.txt'</span>, <span class="string">'a+'</span>);  </span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>)&#123;  </span><br><span class="line">    fwrite($f, $a);  </span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>执行这个程序，它会在本地产生一个1.txt文件，且会一直往里面写。</p>
 <p>2，使用ps命令查看，会有进程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">8214  8184  0 21:43 pts/0    00:00:00 php test.php</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">8214  8184  0 21:43 pts/0    00:00:00 php test.php</span><br></pre></td></tr></table></figure>
 <p>3，我们把1.txt文件删除，会发现8214这个进程还存在</p>
-<p>4， 使用lsof -p 8214命令查看其打开的文件，在最后一行会看见：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME</div><div class="line">php     8214 xxxxx    3u   REG  202,1     1896 248330 /home/xxxxx/1.txt (deleted)</div></pre></td></tr></table></figure></p>
+<p>4， 使用lsof -p 8214命令查看其打开的文件，在最后一行会看见：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME</span><br><span class="line">php     8214 xxxxx    3u   REG  202,1     1896 248330 /home/xxxxx/1.txt (deleted)</span><br></pre></td></tr></table></figure></p>
 <p>发现其还在写入，SIZE还在不断上升，why?</p>
 <p>这是因为：</p>
 <blockquote>
@@ -438,9 +438,9 @@
 <p>5，只能删掉该进程</p>
 <p>当然，现在写日志都是按时间来新建文件的，而不是一直往一个文件里写。所以，一般也不会出现这种情况。</p>
 <blockquote>
-<p>参考: （lsof命令详解）<a href="http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316599.html" target="_blank" rel="external">http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316599.html</a></p>
+<p>参考: （lsof命令详解）<a href="http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316599.html" target="_blank" rel="noopener">http://www.cnblogs.com/ggjucheng/archive/2012/01/08/2316599.html</a></p>
 </blockquote>
-<p><a href="http://blog.163.com/aprilthirty60@126/blog/static/88613578201282703952163/" target="_blank" rel="external">http://blog.163.com/aprilthirty60@126/blog/static/88613578201282703952163/</a></p>
+<p><a href="http://blog.163.com/aprilthirty60@126/blog/static/88613578201282703952163/" target="_blank" rel="noopener">http://blog.163.com/aprilthirty60@126/blog/static/88613578201282703952163/</a></p>
 
       
     </div>
@@ -604,9 +604,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -625,7 +625,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -679,12 +679,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 

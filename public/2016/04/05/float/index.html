@@ -59,7 +59,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -90,7 +90,7 @@
 <meta property="og:description" content="决不要将未知的分数强制转换为int类型，这样有时会导致不可预料的结果。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://7xsaff.com1.z0.glb.clouddn.com/2016/0405/12.pic.jpg">
-<meta property="og:updated_time" content="2017-09-18T11:36:51.000Z">
+<meta property="og:updated_time" content="2018-07-04T16:16:35.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浮点数几个易错点">
 <meta name="twitter:description" content="决不要将未知的分数强制转换为int类型，这样有时会导致不可预料的结果。">
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  304 字
+                  312
                 </span>
               
 
@@ -400,7 +400,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1 分钟
+                  1
                 </span>
               
             </div>
@@ -428,7 +428,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016/0405/12.pic.jpg" rel="gallery_cj7q4uqz90006kkjez3mjgzxw"
+                 href="http://7xsaff.com1.z0.glb.clouddn.com/2016/0405/12.pic.jpg" rel="gallery_cjj7cxxs80009si00l525hoxg"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="http://7xsaff.com1.z0.glb.clouddn.com/2016/0405/12.pic.jpg" itemprop="contentUrl"/>
               </a>
@@ -443,13 +443,13 @@
       
         <p>参看资料:</p>
 <blockquote>
-<p>浮点数指南：<a href="http://floating-point-gui.de/" target="_blank" rel="external">http://floating-point-gui.de/</a> (后面我会翻译)<br>php官方文档：<br><a href="http://php.net/manual/zh/language.types.float.php" target="_blank" rel="external">http://php.net/manual/zh/language.types.float.php</a><br><a href="http://php.net/manual/zh/language.types.integer.php#language.types.integer.casting" target="_blank" rel="external">http://php.net/manual/zh/language.types.integer.php#language.types.integer.casting</a><br><a href="http://php.net/manual/zh/language.types.type-juggling.php" target="_blank" rel="external">http://php.net/manual/zh/language.types.type-juggling.php</a></p>
+<p>浮点数指南：<a href="http://floating-point-gui.de/" target="_blank" rel="noopener">http://floating-point-gui.de/</a> (后面我会翻译)<br>php官方文档：<br><a href="http://php.net/manual/zh/language.types.float.php" target="_blank" rel="noopener">http://php.net/manual/zh/language.types.float.php</a><br><a href="http://php.net/manual/zh/language.types.integer.php#language.types.integer.casting" target="_blank" rel="noopener">http://php.net/manual/zh/language.types.integer.php#language.types.integer.casting</a><br><a href="http://php.net/manual/zh/language.types.type-juggling.php" target="_blank" rel="noopener">http://php.net/manual/zh/language.types.type-juggling.php</a></p>
 </blockquote>
 <p>先来看个例子eg1.</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$n = <span class="string">"19.99"</span>;</div><div class="line"><span class="keyword">print</span> intval($n * <span class="number">100</span>).chr(<span class="number">10</span>);</div><div class="line"><span class="keyword">print</span> intval(strval($n*<span class="number">100</span>));</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$n = <span class="string">"19.99"</span>;</span><br><span class="line"><span class="keyword">print</span> intval($n * <span class="number">100</span>).chr(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">print</span> intval(strval($n*<span class="number">100</span>));</span><br></pre></td></tr></table></figure>
 <p>得出来的结果是：1998和1999</p>
 <p>另外一个例子eg2.</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="keyword">echo</span> (int) ((<span class="number">0.1</span>+<span class="number">0.7</span>) * <span class="number">10</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> (int) ((<span class="number">0.1</span>+<span class="number">0.7</span>) * <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
 <p>结果是：7</p>
 <p>官方文档给出的警告是：</p>
 <blockquote>
@@ -462,7 +462,7 @@
 <p>永远不要相信浮点数精确到了最后一位，也永远不要直接比较俩浮点数是否相等。</p>
 </blockquote>
 <p>比如下面的例子eg3.</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$x = <span class="number">8</span> - <span class="number">6.4</span>;</div><div class="line">$y = <span class="number">1.6</span>;</div><div class="line">var_dump($x == $y);</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$x = <span class="number">8</span> - <span class="number">6.4</span>;</span><br><span class="line">$y = <span class="number">1.6</span>;</span><br><span class="line">var_dump($x == $y);</span><br></pre></td></tr></table></figure>
 <p>结果并不相等，因为$x实际已经不是1.6了，而是1.5999999…. var_dump只是给你显示最近的数1.6</p>
 
       
@@ -627,9 +627,9 @@
                   </span>
                 
                   <span class="links-of-author-item">
-                    <a href="http://weibo.com/druidcoder" target="_blank" title="Weibo">
+                    <a href="mailto:DruidCoder@yahoo.com" target="_blank" title="E-Mail">
                       
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                   </span>
                 
             </div>
@@ -648,7 +648,7 @@
               <ul class="links-of-blogroll-list">
                 
                   <li class="links-of-blogroll-item">
-                    <a href="http://blog.jiaojie.site/" title="Jiao" target="_blank">Jiao</a>
+                    <a href="http://blog.jiaojie.site/" title="jiao" target="_blank">jiao</a>
                   </li>
                 
               </ul>
@@ -702,12 +702,6 @@
 
 
 
-
-
-
-  <div style="display: none;">
-    <script src="//s95.cnzz.com/z_stat.php?id=1258129395&web_id=1258129395" language="JavaScript"></script>
-  </div>
 
 
 
