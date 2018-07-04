@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[nginx配置location的index跳转问题]]></title>
+    <url>%2F2018%2F07%2F05%2Fnginx-index%2F</url>
+    <content type="text"><![CDATA[好久没更新了，直到这个虚拟主机提醒我收费，才想起来。。 对于 location = 的匹配，网上大部分都说是精确匹配，nginx匹配出后就会停止往后，但实际上还是有个需要注意的case。比如下面的nginx配置：1234567location = / &#123; index index.html&#125;location /index.html &#123; &#125; 假如请求/，首先会匹配到第一个location，但是由于配置了index，所以nginx会做一次内部跳转，会以/index.html再请求一次，这时就会匹配到第二个location。 可以参看官网的说明：index。]]></content>
+      <categories>
+        <category>web server</category>
+      </categories>
+      <tags>
+        <tag>nginx</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[mysql字段类型binary和varbinary]]></title>
     <url>%2F2017%2F09%2F13%2Fmysql-binary%2F</url>
     <content type="text"><![CDATA[以前都没用过binary和varbinary类型，这边存中文用这两个类型 mysql版本为5.7 官网地址：https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html binary、varbinary类型和char、varchar类似，除了它们是存储二进制数据，而不是非二进制字符串。也就是说它们包含字节而不是字符串。这意味着，它们有二进制字符集和校对规则，并且基于值中的字节数值比较和排序。 允许的最大长度和char、varchar一样，除了一个是字节长度，一个是字符长度。 binary和varbinary数据类型与char binary和varchar binary数据类型不同。对于后一种，binary属性不会把列当成二进制字符列。相反，它会使用列字符集的二进制(_bin)校对规则，列本身存储非二进制字符串而不是二进制字节串。比如，char(5) binary是char(5) CHARACTER SET latin1 COLLATE latin1_bin，假设默认的字符集为latin1。区别于binary(5)，存储的是5字节二进制字符，二进制字符集和校对规则。关于更多二进制字符和非二进制字符串有二进制校对规则的区别，查看Section 10.1.8.5, “The binary Collation Compared to _bin Collations”。 如果严格sql模式没有开启，并且你还给binary或varbinary列设置了超出列最大长度的值，则值会被截断至合适长度并且产生一个警告。对于缩减的例子，你可以通过开启严格sql模式来禁止插入值，从而产生一个错误（而不是一个警告）。可以查看Section 5.1.8, “Server SQL Modes”。 当存储binary值时，它们会被填充值右填充到指定长度。填充值为0x00(0字节)。插入时右填充0x00，查询时不删除尾随字节。所有字节在比较时都有意义，包括order by和distinct操作。0x00字节和空格在比较时是不同的，0x00小于空格。 比如：对于binary(3)列，插入’a ‘时会变成’a \0’。插入’a\0’会变成’a\0\0’。查询时插入的值保持不变。 对于varbinary，插入不会填充，查询时不会去除任何字节。所有字节在比较时都有意义，包括order by和distinct操作。0x00字节和空格在比较时是不同的，0x00小于空格。 还有尾随的填充字节被删掉或者比较时忽略它们的例子，如果列有个唯一索引，插入的列值只有尾随字节数不同才会导致重复键错误。比如，如果表包含’a’，则尝试存储’a\0’将会引发一个重复键错误。 如果你打算用binary类型存储二进制数据，应该仔细考虑上面说的填充和删除特性，确保你检索的值和存储的值完全一样。下面的例子说明binary值的0x00填充是如何影响列值比较： mysql&gt; CREATE TABLE t (c BINARY(3)); Query OK, 0 rows affected (0.01 sec) mysql&gt; INSERT INTO t SET c = &apos;a&apos;; Query OK, 1 row affected (0.01 sec) mysql&gt; SELECT HEX(c), c = &apos;a&apos;, c = &apos;a\0\0&apos; from t; +--------+---------+-------------+ | HEX(c) | c = &apos;a&apos; | c = &apos;a\0\0&apos; | +--------+---------+-------------+ | 610000 | 0 | 1 | +--------+---------+-------------+ 1 row in set (0.09 sec) 如果检索的值必须和没有填充存储的值一样，那么可能用varbinary或者blog数据类型的一种比较合适。]]></content>

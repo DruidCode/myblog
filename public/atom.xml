@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.druidcoder.cn/"/>
-  <updated>2018-07-04T16:16:35.793Z</updated>
+  <updated>2018-07-04T17:21:21.696Z</updated>
   <id>http://blog.druidcoder.cn/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>nginx配置location的index跳转问题</title>
+    <link href="http://blog.druidcoder.cn/2018/07/05/nginx-index/"/>
+    <id>http://blog.druidcoder.cn/2018/07/05/nginx-index/</id>
+    <published>2018-07-04T17:11:49.000Z</published>
+    <updated>2018-07-04T17:21:21.696Z</updated>
+    
+    <content type="html"><![CDATA[<p>好久没更新了，直到这个虚拟主机提醒我收费，才想起来。。<br><a id="more"></a></p><p>对于 location = 的匹配，网上大部分都说是精确匹配，nginx匹配出后就会停止往后，但实际上还是有个需要注意的case。<br>比如下面的nginx配置：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">location = / &#123;</span><br><span class="line">index index.html</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location /index.html &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>假如请求/，首先会匹配到第一个location，但是由于配置了index，所以nginx会做一次内部跳转，会以/index.html再请求一次，这时就会匹配到第二个location。</p><p>可以参看官网的说明：<a href="https://nginx.org/en/docs/http/ngx_http_index_module.html?&amp;_ga=2.170492832.1041583741.1526043489-411238930.1526043489#index" target="_blank" rel="noopener">index</a>。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;好久没更新了，直到这个虚拟主机提醒我收费，才想起来。。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="web server" scheme="http://blog.druidcoder.cn/categories/web-server/"/>
+    
+    
+      <category term="nginx" scheme="http://blog.druidcoder.cn/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>mysql字段类型binary和varbinary</title>
